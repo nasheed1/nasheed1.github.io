@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>নাশিদ লাইব্রেরি · Nasheed Library</title>
 <meta name="description" content="Free and open-source apps for Android and PC by Nasheed.">
-<meta name="theme-color" content="#160709">
+<meta name="theme-color" content="#0b0406">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📕%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#160709; --bg2:#1f0b0e; --line:#3a1319; --ink:#f6e9e7; --mute:#b99a98;
+  --bg:#0b0406; --bg2:#170709; --panel:#1d0a0e; --line:#3a1319; --ink:#f6e9e7; --mute:#b99a98;
   --red:#e11d3f; --red2:#ff4d68; --deep:#7a0f21;
   --sans:"Hind Siliguri","Noto Sans Bengali","Segoe UI",system-ui,sans-serif;
   --disp:"Fraunces","Hind Siliguri",Georgia,serif;
@@ -21,71 +21,136 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.7 var(--sans);
-  padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);
-  background-image:radial-gradient(900px 420px at 85% -80px,rgba(225,29,63,.28),transparent 70%)}
+  padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--red2);outline-offset:3px;border-radius:6px}
-.wrap{max-width:880px;margin:0 auto;padding:0 20px}
-.top{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
-.brand{font:800 18px var(--disp);letter-spacing:.2px;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+/* ---------- top nav ---------- */
+.top{position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  background:rgba(11,4,6,.72);border-bottom:1px solid rgba(58,19,25,.7)}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;padding-top:14px;padding-bottom:14px}
+.brand{font:800 18px var(--disp);letter-spacing:.2px;text-decoration:none;display:flex;align-items:center;gap:10px}
+.brand i{width:11px;height:11px;border-radius:50%;background:var(--red);box-shadow:0 0 14px var(--red);flex:none}
+.nav-r{display:flex;align-items:center;gap:14px}
+.gh-link{color:var(--mute);text-decoration:none;font-size:15px}
+.gh-link:hover{color:var(--red2)}
 .lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
 .lang button{all:unset;cursor:pointer;padding:6px 16px;font-size:15px;color:var(--mute)}
 .lang button[aria-pressed=true]{background:var(--red);color:#fff}
-.hero{padding:56px 0 44px}
-.hero h1{margin:0;font:800 clamp(46px,11vw,96px)/1.08 var(--disp);letter-spacing:-.02em}
-.hero h1 small{display:block;margin-top:10px;font:500 clamp(20px,4vw,30px) var(--disp);color:var(--red2);letter-spacing:0}
-.hero p{max-width:34em;margin:22px 0 0;color:var(--mute);font-size:19px}
-.bar{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 26px}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;text-align:center;
+  padding:110px 0 96px;
+  background:
+    radial-gradient(1000px 480px at 50% -160px,rgba(225,29,63,.30),transparent 70%),
+    radial-gradient(700px 380px at 88% 30%,rgba(122,15,33,.35),transparent 70%),
+    linear-gradient(180deg,#0b0406,#12050a 60%,var(--bg))}
+#stars{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.orb{position:absolute;left:50%;top:-190px;transform:translateX(-50%);width:430px;height:430px;border-radius:50%;
+  background:radial-gradient(circle at 36% 32%,#ff8fa1 0%,var(--red2) 26%,var(--red) 52%,var(--deep) 78%,#2a050c 100%);
+  box-shadow:0 0 120px 30px rgba(225,29,63,.35),inset -28px -34px 70px rgba(0,0,0,.55);
+  opacity:.9;pointer-events:none}
+.orb::after{content:"";position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 70% 78%,rgba(255,255,255,.14),transparent 42%)}
+.ping{position:absolute;width:9px;height:9px;border-radius:50%;background:var(--red2);pointer-events:none}
+.ping::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:1px solid rgba(255,77,104,.7);
+  animation:ping 2.8s ease-out infinite}
+.ping.p1{left:16%;top:34%}.ping.p2{right:14%;top:26%}.ping.p2::after{animation-delay:1.1s}
+.ping.p3{right:24%;bottom:20%}.ping.p3::after{animation-delay:1.9s}
+@keyframes ping{0%{transform:scale(.35);opacity:1}80%,100%{transform:scale(1.7);opacity:0}}
+.hero .wrap{position:relative;z-index:2}
+.pill{display:inline-block;padding:5px 16px;border:1px solid rgba(255,77,104,.45);border-radius:999px;
+  color:var(--red2);font-size:14.5px;letter-spacing:.02em;background:rgba(225,29,63,.10)}
+.hero h1{margin:26px 0 0;font:800 clamp(52px,11vw,108px)/1.06 var(--disp);letter-spacing:-.02em;
+  text-shadow:0 6px 44px rgba(0,0,0,.6)}
+.hero h1 small{display:block;margin-top:12px;font:600 clamp(20px,4vw,30px) var(--disp);color:var(--red2);letter-spacing:.06em}
+.hero p{max-width:36em;margin:24px auto 0;color:#d8bcba;font-size:19.5px}
+.cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:36px}
+.btn{display:inline-block;padding:10px 22px;border-radius:10px;border:1px solid var(--line);text-decoration:none;font-weight:500;background:rgba(23,7,9,.6)}
+.btn:hover{border-color:var(--red2)}
+.btn.main{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 8px 30px rgba(225,29,63,.35)}
+.btn.main:hover{background:var(--red2);border-color:var(--red2)}
+.btn.big{padding:13px 30px;font-size:17.5px;border-radius:12px}
+
+/* ---------- apps section ---------- */
+.sec{padding:64px 0 8px}
+.kicker{color:var(--red2);font:600 14px var(--disp);letter-spacing:.22em;text-transform:uppercase}
+.sec h2{margin:8px 0 0;font:800 clamp(32px,5.4vw,46px)/1.15 var(--disp)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 26px}
 .chip{all:unset;cursor:pointer;padding:7px 18px;border:1px solid var(--line);border-radius:999px;color:var(--mute);font-size:16px}
 .chip:hover{border-color:var(--red)}
 .chip[aria-pressed=true]{background:var(--red);border-color:var(--red);color:#fff}
-.shelf{display:grid;gap:14px;padding-bottom:10px}
-.book{display:grid;grid-template-columns:18px 1fr;background:var(--bg2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.spine{background:linear-gradient(180deg,var(--red),var(--deep));box-shadow:inset -3px 0 0 rgba(0,0,0,.25)}
-.book:nth-child(3n+2) .spine{background:linear-gradient(180deg,#b3122e,#4a0912)}
-.book:nth-child(3n) .spine{background:linear-gradient(180deg,#ff4d68,#9b1530)}
-.body{padding:22px 24px 24px}
-.body h2{margin:0;font:700 28px/1.3 var(--sans)}
-.body h2 span{display:block;font:600 15px var(--disp);color:var(--mute)}
-.body p{margin:12px 0 16px;max-width:38em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px;padding-bottom:12px}
+.card{display:flex;flex-direction:column;background:linear-gradient(180deg,var(--panel),var(--bg2));
+  border:1px solid var(--line);border-radius:16px;padding:26px 26px 24px;
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
+.card:hover{transform:translateY(-4px);border-color:var(--red);box-shadow:0 18px 44px rgba(0,0,0,.45),0 0 0 1px rgba(225,29,63,.25)}
+.tile{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  font:800 26px var(--disp);color:#fff;background:linear-gradient(150deg,var(--red2),var(--deep));
+  box-shadow:0 8px 22px rgba(225,29,63,.35);margin-bottom:18px}
+.card h3{margin:0;font:700 25px/1.3 var(--sans)}
+.card h3 span{display:block;font:600 14.5px var(--disp);color:var(--mute);margin-top:3px}
+.card p{margin:12px 0 16px;color:#cdb0ae;flex:1}
 .tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
 .tag{padding:2px 12px;border-radius:6px;background:rgba(225,29,63,.14);color:var(--red2);font-size:14px}
 .acts{display:flex;gap:10px;flex-wrap:wrap}
-.btn{display:inline-block;padding:9px 20px;border-radius:8px;border:1px solid var(--line);text-decoration:none;font-weight:500}
-.btn:hover{border-color:var(--red2)}
-.btn.main{background:var(--red);border-color:var(--red);color:#fff}
-.btn.main:hover{background:var(--red2);border-color:var(--red2)}
-.empty{padding:40px 0;color:var(--mute)}
-.more{margin:10px 0 0;padding:22px 24px;border:1px dashed var(--line);border-radius:10px;color:var(--mute)}
-footer{margin-top:56px;padding:26px 0 40px;border-top:1px solid var(--line);color:var(--mute);font-size:15px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-@media (max-width:520px){.body{padding:18px 16px 20px}.body h2{font-size:24px}}
-@media (prefers-reduced-motion:no-preference){.book{transition:border-color .2s}.book:hover{border-color:var(--red)}}
+.empty{grid-column:1/-1;padding:40px 0;color:var(--mute)}
+.more-card{display:flex;align-items:center;justify-content:center;text-align:center;border:1.5px dashed var(--line);
+  border-radius:16px;padding:26px;color:var(--mute);min-height:180px}
+footer{margin-top:64px;padding:26px 0 40px;border-top:1px solid var(--line);color:var(--mute);font-size:15px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media (max-width:520px){.hero{padding:84px 0 72px}.orb{width:300px;height:300px;top:-130px}.card{padding:20px 18px}}
+@media (prefers-reduced-motion:reduce){.ping::after{animation:none}.card{transition:none}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="top">
-    <a class="brand" href="#">Nasheed Library</a>
-    <div class="lang" role="group" aria-label="Language">
-      <button data-l="bn" aria-pressed="true">বাংলা</button>
-      <button data-l="en" aria-pressed="false">English</button>
-    </div>
-  </header>
 
-  <section class="hero">
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#"><i></i>Nasheed Library</a>
+    <div class="nav-r">
+      <a class="gh-link" href="https://github.com/nasheed1" rel="noopener">GitHub</a>
+      <div class="lang" role="group" aria-label="Language">
+        <button data-l="bn" aria-pressed="true">বাংলা</button>
+        <button data-l="en" aria-pressed="false">English</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="orb" aria-hidden="true"></div>
+  <span class="ping p1" aria-hidden="true"></span>
+  <span class="ping p2" aria-hidden="true"></span>
+  <span class="ping p3" aria-hidden="true"></span>
+  <div class="wrap">
+    <span class="pill" data-t="heroTag"></span>
     <h1><span data-t="title">নাশিদ লাইব্রেরি</span><small>Nasheed Library</small></h1>
     <p data-t="lead"></p>
+    <div class="cta">
+      <a class="btn main big" href="#apps" data-t="browse"></a>
+      <a class="btn big" href="https://github.com/nasheed1" rel="noopener" data-t="gh"></a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <section class="sec" id="apps">
+    <div class="kicker">Open Source</div>
+    <h2 data-t="appsH"></h2>
+    <div class="bar" role="group" aria-label="Filter" id="bar"></div>
+    <main class="grid" id="shelf" aria-live="polite"></main>
   </section>
+</div>
 
-  <div class="bar" role="group" aria-label="Filter" id="bar"></div>
-  <main class="shelf" id="shelf" aria-live="polite"></main>
-  <div class="more" data-t="more"></div>
-
-  <footer>
+<footer>
+  <div class="wrap">
     <span data-t="foot"></span>
     <a href="https://github.com/nasheed1" rel="noopener">GitHub · nasheed1</a>
-  </footer>
-</div>
+  </div>
+</footer>
 
 <script>
 // Fallback copy of apps.json, used if the file cannot be loaded (for example when opened from disk).
@@ -93,14 +158,18 @@ var FALLBACK=[{id:"nijashwa-studio",name:{bn:"নিজস্ব স্টুড
 
 var T={
   bn:{title:"নাশিদ লাইব্রেরি",
+      heroTag:"ওপেন সোর্স · সম্পূর্ণ ফ্রি",
       lead:"আমার বানানো সব ওপেন সোর্স অ্যাপ এক তাকে। মোবাইল ও PC দুটোর জন্যই, সবই বিনা মূল্যে।",
+      browse:"অ্যাপগুলো দেখুন",gh:"GitHub-এ দেখুন",appsH:"আমার অ্যাপসমূহ",
       all:"সব",android:"Android",pc:"PC",web:"ওয়েব",
       apk:"APK ডাউনলোড",webOpen:"ব্রাউজারে চালাও",pcDl:"PC-র জন্য ডাউনলোড",src:"সোর্স কোড",
       empty:"এই ধরনের কোনো অ্যাপ এখনও নেই।",
       more:"আরও অ্যাপ আসছে। নতুন অ্যাপ বানালেই এখানে যোগ হবে।",
       foot:"সব অ্যাপ MIT লাইসেন্সে ওপেন সোর্স।"},
   en:{title:"নাশিদ লাইব্রেরি",
+      heroTag:"Open source · Completely free",
       lead:"Every open-source app I build, on one shelf. For phone and PC, all free.",
+      browse:"Browse the apps",gh:"View on GitHub",appsH:"My Apps",
       all:"All",android:"Android",pc:"PC",web:"Web",
       apk:"Download APK",webOpen:"Open in browser",pcDl:"Download for PC",src:"Source code",
       empty:"No apps of this kind yet.",
@@ -129,23 +198,24 @@ function render(){
   var list=apps.filter(function(a){return filter==="all"||(a.tags||[]).indexOf(filter)>-1});
   if(!list.length){shelf.appendChild(el("div","empty",t.empty));return}
   list.forEach(function(a){
-    var book=el("article","book"),body=el("div","body");
-    book.appendChild(el("div","spine"));
-    var h=el("h2",null,a.name[lang]);
+    var card=el("article","card");
+    card.appendChild(el("div","tile",(a.name[lang]||"?").charAt(0)));
+    var h=el("h3",null,a.name[lang]);
     if(lang==="bn"&&a.name.en)h.appendChild(el("span",null,a.name.en));
     if(lang==="en"&&a.name.bn)h.appendChild(el("span",null,a.name.bn));
-    body.appendChild(h);
-    body.appendChild(el("p",null,a.desc[lang]));
+    card.appendChild(h);
+    card.appendChild(el("p",null,a.desc[lang]));
     var tags=el("div","tags");
     (a.tags||[]).forEach(function(k){tags.appendChild(el("span","tag",t[k]||k))});
-    body.appendChild(tags);
+    card.appendChild(tags);
     var acts=el("div","acts"),L=a.links||{};
     if(L.apk)acts.appendChild(link("main",t.apk,L.apk));
     if(L.web)acts.appendChild(link("main",t.webOpen,L.web));
     if(L.pc)acts.appendChild(link("",t.pcDl,L.pc));
     if(L.source)acts.appendChild(link("",t.src,L.source));
-    body.appendChild(acts);book.appendChild(body);shelf.appendChild(book);
+    card.appendChild(acts);shelf.appendChild(card);
   });
+  var more=el("div","more-card",t.more);shelf.appendChild(more);
 }
 
 document.querySelectorAll(".lang button").forEach(function(b){
@@ -155,6 +225,30 @@ document.querySelectorAll(".lang button").forEach(function(b){
 fetch("apps.json").then(function(r){if(!r.ok)throw 0;return r.json()})
   .catch(function(){return FALLBACK})
   .then(function(d){apps=d;render()});
+
+/* ---------- starfield (hero background) ---------- */
+(function(){
+  var cv=document.getElementById("stars");if(!cv)return;
+  var ctx=cv.getContext("2d"),W,H,stars=[],t0=0;
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function size(){
+    var hero=cv.parentElement;W=hero.clientWidth;H=hero.clientHeight;
+    cv.width=W;cv.height=H;
+    stars=[];var n=Math.min(130,Math.floor(W*H/11000));
+    for(var i=0;i<n;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+.3,p:Math.random()*6.28,s:.4+Math.random()*.9});
+  }
+  function draw(ts){
+    ctx.clearRect(0,0,W,H);t0=ts*.001;
+    for(var i=0;i<stars.length;i++){var s=stars[i];
+      var a=.35+.65*Math.abs(Math.sin(t0*s.s+s.p));
+      ctx.globalAlpha=a;ctx.fillStyle="#ffd9de";
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.283);ctx.fill();}
+    ctx.globalAlpha=1;
+    if(!reduce)requestAnimationFrame(draw);
+  }
+  size();requestAnimationFrame(draw);
+  window.addEventListener("resize",function(){size();if(reduce)requestAnimationFrame(draw)});
+})();
 </script>
 </body>
 </html>
