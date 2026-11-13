@@ -8,6 +8,7 @@
     },
     "tags": ["android", "pc"],
     "links": {
+      "web": "https://nasheed1.github.io/nijashwa-studio/",
       "apk": "https://github.com/nasheed1/nijashwa-studio/releases/latest",
       "source": "https://github.com/nasheed1/nijashwa-studio"
     }
