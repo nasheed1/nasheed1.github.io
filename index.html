@@ -95,6 +95,8 @@ background:linear-gradient(115deg,#843026 0,#9e3a2e 45%,#8a3226 75%,#7c2c22)}
 .info p{color:var(--mute);font:600 .97rem/1.7 var(--serif);margin-bottom:10px}
 .btns{display:flex;flex-wrap:wrap;gap:9px;margin-top:auto;padding-bottom:2px}
 .btn{position:relative;display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-size:.92rem;font-weight:600;padding:8px 15px;border-radius:var(--rc);border:1.5px solid var(--ink);background:var(--scrap);color:var(--ink);box-shadow:2px 2px 0 rgba(56,53,47,.45);transition:transform .3s cubic-bezier(.2,1.8,.4,1),box-shadow .2s,background .2s}
+.btn.soon{border-style:dashed;opacity:.82}
+.info p.pcnote{font-size:.85rem;font-style:italic;color:var(--mute);margin-top:2px}
 .btn:hover{transform:translateY(-2px) rotate(-.6deg)}
 .btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 rgba(56,53,47,.45)}
 .btn.p{background:var(--red);color:var(--scrap)}
@@ -508,10 +510,10 @@ footer{border-top:2px dashed var(--line);background:linear-gradient(#f7f2e7,#efe
 <script>
 (function(){
 "use strict";
-var EMB=[{"id":"nijashwa-studio","name":{"bn":"নিজস্ব স্টুডিও","en":"Nijashwa Studio"},"desc":{"bn":"অফলাইন ভিডিও এডিটর। টাইমলাইন, বাংলা টেক্সট, ট্রানজিশন, ইফেক্ট ও MP4 এক্সপোর্ট। সার্ভার বা অ্যাকাউন্ট লাগে না।","en":"An offline video editor with timeline, Bengali text, transitions, effects and MP4 export. No server or account needed."},"tags":["android","pc"],"links":{"web":"https://nasheed1.github.io/nijashwa-studio/","apk":"https://github.com/nasheed1/nijashwa-studio/releases/latest","pc":"https://github.com/nasheed1/nijashwa-studio/releases/latest/download/NijashwaStudio.exe","source":"https://github.com/nasheed1/nijashwa-studio"}}];
+var EMB=[{"id":"nijashwa-studio","name":{"bn":"নিজস্ব স্টুডিও","en":"Nijashwa Studio"},"desc":{"bn":"অফলাইন ভিডিও এডিটর। টাইমলাইন, বাংলা টেক্সট, ট্রানজিশন, ইফেক্ট ও MP4 এক্সপোর্ট। সার্ভার বা অ্যাকাউন্ট লাগে না।","en":"An offline video editor with timeline, Bengali text, transitions, effects and MP4 export. No server or account needed."},"tags":["android","pc"],"pcSoon":true,"links":{"web":"https://nasheed1.github.io/nijashwa-studio/","apk":"https://github.com/nasheed1/nijashwa-studio/releases/latest","pc":"https://github.com/nasheed1/nijashwa-studio/releases/latest/download/NijashwaStudio.exe","source":"https://github.com/nasheed1/nijashwa-studio"}}];
 var T={
-bn:{lead:"আমার বানানো সব ওপেন সোর্স অ্যাপ এক তাকে। মোবাইল ও PC দুটোর জন্যই, সবই বিনা মূল্যে।",all:"সব",android:"Android",pc:"PC",web:"ওয়েব",apk:"APK ডাউনলোড",webb:"ব্রাউজারে চালাও",pcb:"PC-র জন্য ডাউনলোড",src:"সোর্স কোড",more:"আরও অ্যাপ আসছে। নতুন অ্যাপ বানালেই এখানে যোগ হবে।",empty:"এই ধরনের কোনো অ্যাপ এখনও নেই।",foot:"সব অ্যাপ MIT লাইসেন্সে ওপেন সোর্স।",hint:"বইটি খুলতে ছুঁয়ে দিন",swipe:"পাশে স্লাইড করে পেজ উল্টান",contents:"সূচিপত্র",pick:"কোন অ্যাপটা খুলবে, বেছে নাও",end:"সমাপ্ত",pg:"পৃষ্ঠা",cover:"প্রচ্ছদ"},
-en:{lead:"Every open-source app I build, on one shelf. For phone and PC, all free.",all:"All",android:"Android",pc:"PC",web:"Web",apk:"Download APK",webb:"Open in browser",pcb:"Download for PC",src:"Source code",more:"More apps are on the way. New ones will be added here as I build them.",empty:"No apps of this kind yet.",foot:"All apps are open source under the MIT license.",hint:"Tap the book to open it",swipe:"Swipe to turn the page",contents:"Contents",pick:"Pick an app to open",end:"The End",pg:"Page",cover:"Cover"}};
+bn:{lead:"আমার বানানো সব ওপেন সোর্স অ্যাপ এক তাকে। মোবাইল ও PC দুটোর জন্যই, সবই বিনা মূল্যে।",all:"সব",android:"Android",pc:"PC",web:"ওয়েব",apk:"APK ডাউনলোড",webb:"ব্রাউজারে চালাও",pcb:"PC-র জন্য ডাউনলোড",src:"সোর্স কোড",more:"আরও অ্যাপ আসছে। নতুন অ্যাপ বানালেই এখানে যোগ হবে।",empty:"এই ধরনের কোনো অ্যাপ এখনও নেই।",foot:"সব অ্যাপ MIT লাইসেন্সে ওপেন সোর্স।",hint:"বইটি খুলতে ছুঁয়ে দিন",swipe:"পাশে স্লাইড করে পেজ উল্টান",contents:"সূচিপত্র",pick:"কোন অ্যাপটা খুলবে, বেছে নাও",end:"সমাপ্ত",pg:"পৃষ্ঠা",cover:"প্রচ্ছদ",pcsoon:"PC সংস্করণ — Coming Soon",pcnote:"PC সংস্করণটা এখনও ডেভেলপমেন্টে আছে — পুরোপুরি তৈরি হয়নি। তবু চাইলে বাটনে ক্লিক করে এখনই ডাউনলোড করে দেখতে পারো।"},
+en:{lead:"Every open-source app I build, on one shelf. For phone and PC, all free.",all:"All",android:"Android",pc:"PC",web:"Web",apk:"Download APK",webb:"Open in browser",pcb:"Download for PC",src:"Source code",more:"More apps are on the way. New ones will be added here as I build them.",empty:"No apps of this kind yet.",foot:"All apps are open source under the MIT license.",hint:"Tap the book to open it",swipe:"Swipe to turn the page",contents:"Contents",pick:"Pick an app to open",end:"The End",pg:"Page",cover:"Cover",pcsoon:"PC version — Coming Soon",pcnote:"The PC version is still in development and not fully ready yet. If you want to try it anyway, the button above still downloads it."}};
 var FILTERS=["all","android","pc","web"],ICON={android:"i-and",pc:"i-pc",web:"i-web"};
 var lang="bn",flt="all",apps=EMB;
 try{var s0=localStorage.getItem("nl-lang");if(s0==="bn"||s0==="en")lang=s0}catch(e){}
@@ -573,9 +575,9 @@ function appPage(a){
   var b=el("div","btns"),L=a.links||{},u;
   if(u=safe(L.apk))b.appendChild(btn(u,t("apk"),"i-dl",1));
   if(u=safe(L.web))b.appendChild(btn(u,t("webb"),"i-web",1));
-  if(u=safe(L.pc))b.appendChild(btn(u,t("pcb"),"i-pc"));
+  if(u=safe(L.pc)){var pb=btn(u,a.pcSoon?t("pcsoon"):t("pcb"),"i-pc");if(a.pcSoon)pb.classList.add("soon");b.appendChild(pb)}
   if(u=safe(L.source))b.appendChild(btn(u,t("src"),"i-code"));
-  inf.appendChild(b);p.appendChild(inf);return p}
+  inf.appendChild(b);if(a.pcSoon&&safe(L.pc))inf.appendChild(el("p","pcnote",t("pcnote")));p.appendChild(inf);return p}
 function morePage(){
   var p=el("div","pg pgMore"),d=el("div","dash");
   d.appendChild(ic("i-plus"));d.appendChild(el("p",null,t("more")));p.appendChild(d);return p}
