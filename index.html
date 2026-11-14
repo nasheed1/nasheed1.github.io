@@ -366,23 +366,38 @@ footer{border-top:2px dashed var(--line);background:linear-gradient(#f7f2e7,#efe
 .bot.fallen .dizzy{display:inline;transform-box:view-box;transform-origin:64px 26px;animation:orbit 1.3s linear infinite}
 @keyframes orbit{to{transform:rotate(360deg)}}
 /* getting up: stumbles, slips back, pushes with both arms, wobbles upright */
-.bot.getup .bot-svg{animation:getUp 2.8s cubic-bezier(.4,0,.3,1) forwards;transform-origin:50% 100%}
+.bot.getup .bot-svg{animation:getUp 2.8s linear forwards;transform-origin:50% 100%}
 @keyframes getUp{
-  0%{transform:translateY(calc(var(--bw,86px)*-0.500)) rotate(calc(var(--dir,1)*90deg)) scaleY(1)}
-  8%{transform:translateY(calc(var(--bw,86px)*-0.497)) rotate(calc(var(--dir,1)*84deg)) scaleY(1)}
-  18%{transform:translateY(calc(var(--bw,86px)*-0.500)) rotate(calc(var(--dir,1)*90deg)) scaleY(1)}
-  30%{transform:translateY(calc(var(--bw,86px)*-0.457)) rotate(calc(var(--dir,1)*66deg)) scaleY(1)}
-  38%{transform:translateY(calc(var(--bw,86px)*-0.481)) rotate(calc(var(--dir,1)*74deg)) scaleY(1)}
-  52%{transform:translateY(calc(var(--bw,86px)*-0.321)) rotate(calc(var(--dir,1)*40deg)) scaleY(1)}
-  60%{transform:translateY(calc(var(--bw,86px)*-0.372)) rotate(calc(var(--dir,1)*48deg)) scaleY(1)}
-  74%{transform:translateY(calc(var(--bw,86px)*-0.121)) rotate(calc(var(--dir,1)*14deg)) scaleY(1)}
-  82%{transform:translateY(calc(var(--bw,86px)*-0.052)) rotate(calc(var(--dir,1)*-6deg)) scaleY(1.05)}
-  90%{transform:translateY(calc(var(--bw,86px)*-0.026)) rotate(calc(var(--dir,1)*3deg)) scaleY(0.95)}
-  100%{transform:translateY(calc(var(--bw,86px)*-0.000)) rotate(calc(var(--dir,1)*0deg)) scaleY(1)}
+  0%{transform:translateY(calc(var(--bw,86px)*-0.500)) rotate(calc(var(--dir,1)*90.0deg)) scaleY(1.000)}
+  4%{transform:translateY(calc(var(--bw,86px)*-0.500)) rotate(calc(var(--dir,1)*89.6deg)) scaleY(1.000)}
+  8%{transform:translateY(calc(var(--bw,86px)*-0.500)) rotate(calc(var(--dir,1)*88.6deg)) scaleY(1.000)}
+  12%{transform:translateY(calc(var(--bw,86px)*-0.499)) rotate(calc(var(--dir,1)*87.2deg)) scaleY(1.000)}
+  16%{transform:translateY(calc(var(--bw,86px)*-0.499)) rotate(calc(var(--dir,1)*85.8deg)) scaleY(1.000)}
+  20%{transform:translateY(calc(var(--bw,86px)*-0.498)) rotate(calc(var(--dir,1)*84.5deg)) scaleY(1.000)}
+  24%{transform:translateY(calc(var(--bw,86px)*-0.495)) rotate(calc(var(--dir,1)*82.2deg)) scaleY(1.000)}
+  28%{transform:translateY(calc(var(--bw,86px)*-0.489)) rotate(calc(var(--dir,1)*78.1deg)) scaleY(1.000)}
+  32%{transform:translateY(calc(var(--bw,86px)*-0.476)) rotate(calc(var(--dir,1)*72.3deg)) scaleY(1.000)}
+  36%{transform:translateY(calc(var(--bw,86px)*-0.457)) rotate(calc(var(--dir,1)*66.1deg)) scaleY(1.000)}
+  40%{transform:translateY(calc(var(--bw,86px)*-0.436)) rotate(calc(var(--dir,1)*60.8deg)) scaleY(1.000)}
+  44%{transform:translateY(calc(var(--bw,86px)*-0.417)) rotate(calc(var(--dir,1)*56.4deg)) scaleY(1.000)}
+  48%{transform:translateY(calc(var(--bw,86px)*-0.394)) rotate(calc(var(--dir,1)*52.1deg)) scaleY(1.000)}
+  52%{transform:translateY(calc(var(--bw,86px)*-0.364)) rotate(calc(var(--dir,1)*46.7deg)) scaleY(1.000)}
+  56%{transform:translateY(calc(var(--bw,86px)*-0.323)) rotate(calc(var(--dir,1)*40.2deg)) scaleY(1.000)}
+  60%{transform:translateY(calc(var(--bw,86px)*-0.278)) rotate(calc(var(--dir,1)*33.8deg)) scaleY(1.000)}
+  64%{transform:translateY(calc(var(--bw,86px)*-0.239)) rotate(calc(var(--dir,1)*28.6deg)) scaleY(1.000)}
+  68%{transform:translateY(calc(var(--bw,86px)*-0.206)) rotate(calc(var(--dir,1)*24.4deg)) scaleY(1.000)}
+  72%{transform:translateY(calc(var(--bw,86px)*-0.173)) rotate(calc(var(--dir,1)*20.3deg)) scaleY(1.000)}
+  76%{transform:translateY(calc(var(--bw,86px)*-0.134)) rotate(calc(var(--dir,1)*15.5deg)) scaleY(1.000)}
+  80%{transform:translateY(calc(var(--bw,86px)*-0.092)) rotate(calc(var(--dir,1)*10.6deg)) scaleY(1.000)}
+  84%{transform:translateY(calc(var(--bw,86px)*-0.049)) rotate(calc(var(--dir,1)*5.6deg)) scaleY(1.005)}
+  88%{transform:translateY(calc(var(--bw,86px)*-0.001)) rotate(calc(var(--dir,1)*-0.1deg)) scaleY(1.039)}
+  92%{transform:translateY(calc(var(--bw,86px)*-0.018)) rotate(calc(var(--dir,1)*-2.1deg)) scaleY(1.034)}
+  96%{transform:translateY(calc(var(--bw,86px)*-0.005)) rotate(calc(var(--dir,1)*0.5deg)) scaleY(0.962)}
+  100%{transform:translateY(calc(var(--bw,86px)*-0.000)) rotate(calc(var(--dir,1)*0.0deg)) scaleY(1.000)}
 }
 
-.bot.getup .arm-wave{animation:pushL 2.8s ease-in-out forwards}
-.bot.getup .arm-point{transform-origin:90px 100px;transform-box:view-box;animation:pushR 2.8s ease-in-out forwards}
+.bot.getup .arm-wave{animation:pushL 2.8s cubic-bezier(.45,.12,.55,.88) forwards}
+.bot.getup .arm-point{transform-origin:90px 100px;transform-box:view-box;animation:pushR 2.8s cubic-bezier(.45,.12,.55,.88) forwards}
 @keyframes pushL{0%,20%{transform:rotate(0)}30%{transform:rotate(-50deg)}40%{transform:rotate(-15deg)}52%{transform:rotate(-60deg)}62%{transform:rotate(-25deg)}74%{transform:rotate(-70deg)}84%{transform:rotate(10deg)}100%{transform:rotate(0)}}
 @keyframes pushR{0%,20%{transform:rotate(0)}30%{transform:rotate(50deg)}40%{transform:rotate(15deg)}52%{transform:rotate(60deg)}62%{transform:rotate(25deg)}74%{transform:rotate(70deg)}84%{transform:rotate(-10deg)}100%{transform:rotate(0)}}
 .bot.getup .f1{animation:legK .4s ease-in-out 7 alternate}
