@@ -147,6 +147,8 @@ background:linear-gradient(115deg,#843026 0,#9e3a2e 45%,#8a3226 75%,#7c2c22)}
 .bot.walk .f2{animation:step .34s ease-in-out infinite alternate-reverse}
 @keyframes step{from{transform:rotate(-17deg)}to{transform:rotate(17deg)}}
 .bot.walk .bot-svg{animation-duration:1s}
+.bot.hop .bot-flip{animation:hopS .5s ease}
+@keyframes hopS{40%{transform:translateY(-9px) rotate(-4deg)}}
 @keyframes bob2{50%{transform:translateY(-4px)}}
 .bot .ant-ball{animation:antglow 1.8s ease-in-out infinite}
 @keyframes antglow{50%{fill:var(--red)}}
@@ -197,6 +199,215 @@ footer a:hover{color:var(--red)}
   .info p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* ---------- design polish layer ---------- */
+/* warmer desk behind the book, soft vignette */
+.stage{background:radial-gradient(ellipse 80% 70% at 50% 42%,#fbf7ec 0,#f7f2e7 48%,#ebe1c8 100%)}
+/* phone book rests on the desk: soft contact shadow (the open spread keeps its own page shadows) */
+.bookM::after{content:"";position:absolute;left:5%;right:5%;bottom:-20px;height:26px;z-index:-1;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 50%,rgba(56,53,47,.34) 0,rgba(56,53,47,.12) 45%,transparent 72%)}
+/* cover: foil title, richer frame */
+.pgCover b{color:#f8ecc0;text-shadow:1px 1px 0 rgba(0,0,0,.35),0 0 18px rgba(240,223,160,.25);letter-spacing:.01em}
+.pgCover small{color:#f3e3ad}
+.pgCover::before{inset:18px;border-color:rgba(240,223,160,.7);box-shadow:inset 0 0 0 5px rgba(240,223,160,.18),inset 0 0 0 7px rgba(252,248,239,.28)}
+.pgCover .clogo{background:#f8ecc0;border-color:#38352f}
+/* page numbers get small dashes either side */
+.pgnum::before{content:"\2013\00a0"}.pgnum::after{content:"\00a0\2013"}
+/* title page: a bit more air, calmer highlighter */
+.pgTitle h1{letter-spacing:.005em}
+.pgTitle h1 .hlt{background:linear-gradient(transparent 62%,rgba(240,223,160,.95) 62%,rgba(240,223,160,.95) 92%,transparent 92%)}
+.pgTitle p.lead{margin-top:4px}
+/* contents: easier to tap, numbers in a tidy column */
+.toc button{min-height:48px;align-items:center;padding:10px 10px}
+.toc button:active{background:rgba(240,223,160,.8)}
+.toc .no{min-width:2ch;text-align:right}
+.pill{min-height:40px}
+/* app page: calmer art tape, better rhythm */
+.info h3{margin-top:2px}
+.info p{margin-bottom:12px}
+.btns{gap:10px}
+.btn{min-height:42px}
+.btn.p{box-shadow:2px 2px 0 rgba(56,53,47,.55)}
+/* top bar and footer */
+.bar{box-shadow:0 2px 0 rgba(179,172,157,.35)}
+footer{border-top:2px dashed var(--line);background:linear-gradient(#f7f2e7,#efe6cf)}
+/* robot: only its body is touchable, the bubble and the empty box around it let taps and swipes through */
+.bot{pointer-events:none}
+.bot .bot-flip{pointer-events:auto}
+@media(max-width:899px){
+  .stage{padding-top:66px}
+  .bot{top:6px;left:8px}
+  .bot-svg{width:56px}
+  .bot-bub{max-width:min(210px,62vw)}
+  .bookM{height:min(70vh,620px);height:min(70dvh,620px)}
+}
+@media(max-width:899px) and (max-height:740px){.bookM{height:min(72vh,620px);height:min(72dvh,620px)}}
+/* robot: its box is just the body; the speech bubble floats beside it, so nothing shifts while it is held or flying */
+.bot{display:block;gap:0;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.bot .bot-flip{pointer-events:auto;touch-action:none;padding:9px;margin:-9px;-webkit-tap-highlight-color:transparent;cursor:grab}
+.bot-bub{position:absolute;top:2px;left:calc(100% + 4px);width:max-content;margin:0}
+.bot.flip .bot-bub{left:auto;right:calc(100% + 4px)}
+/* held or flying: no chat. After a crash the "ouch" bubble shows again */
+.bot.held .bot-bub,.bot.flying:not(.hurt) .bot-bub{display:none}
+.bot.held .bot-svg{transform:scale(1.08) rotate(-4deg);transition:transform .15s}
+/* angry face after hitting a wall or corner */
+.bot .brow,.bot .frown{display:none}
+.bot.angry .brow,.bot.angry .frown{display:inline}
+.bot.angry .smile{display:none}
+.bot.angry .bface{fill:#f6c8bd}
+.bot.angry .cheek{opacity:.9}
+.bot.angry .eye{animation:none;transform:scaleY(.7)}
+/* crash: no chatting, he falls, struggles up, perches, flies, grumbles; two crashes in a row make him sad */
+.bot.mute .bot-bub{display:none}
+.bot-svg{overflow:visible}
+.bot .scream,.bot .sadbrow,.bot .tear,.bot .flames,.bot .packg{display:none}
+.bot.hurt .frown{display:none}
+.bot.hurt .scream{display:inline}
+.bot.fallen .bot-svg{animation:none;transform:rotate(88deg);transform-origin:50% 100%;transition:transform .32s cubic-bezier(.3,1.7,.5,1)}
+.bot.fallen .arm-wave,.bot.getup .arm-wave{animation:none}
+.bot.getup .bot-svg{animation:struggle 2.1s ease forwards;transform-origin:50% 100%}
+@keyframes struggle{
+  0%{transform:rotate(88deg)}10%{transform:rotate(70deg) translateX(2px)}20%{transform:rotate(86deg)}
+  34%{transform:rotate(52deg) translateX(-2px)}44%{transform:rotate(68deg) translateX(2px)}
+  58%{transform:rotate(30deg)}68%{transform:rotate(42deg) translateX(-2px)}
+  82%{transform:rotate(10deg)}90%{transform:rotate(16deg)}100%{transform:rotate(0deg)}}
+.bot.jet .packg,.bot.jet .flames{display:inline}
+.bot.jet .fl{transform-box:fill-box;transform-origin:50% 0;animation:flick .14s linear infinite alternate}
+.bot.jet .fl+.fl{animation-delay:.07s}
+@keyframes flick{from{transform:scaleY(.8) scaleX(1.05)}to{transform:scaleY(1.3) scaleX(.9)}}
+.bot.jet .arm-wave,.bot.jet .arm-point{animation:none}
+/* words float above his head while he hovers */
+.bot.above .bot-bub,.bot.above.flip .bot-bub{left:50%;right:auto;top:auto;bottom:calc(100% + 12px);translate:-50% 0;text-align:center}
+.bot.above .bot-bub::after,.bot.above.flip .bot-bub::after{left:50%;right:auto;bottom:-7px;margin-left:-5px;border:0;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+/* sad: eyebrows slope up, a tear, sitting low in the corner */
+.bot.sad .brow{display:none}
+.bot.sad .sadbrow,.bot.sad .tear,.bot.sad .frown{display:inline}
+.bot.sad .smile,.bot.sad .scream{display:none}
+.bot.sad .tear{animation:tear 1.8s ease-in infinite}
+@keyframes tear{0%{transform:translateY(-3px);opacity:0}25%{opacity:1}100%{transform:translateY(18px);opacity:0}}
+.bot.sad .eye{animation:none;transform:scaleY(.8)}
+.bot.sit .bot-svg{animation:none;transform:scaleY(.86) rotate(-3deg);transform-origin:50% 100%;transition:transform .5s}
+.bot.sit .arm-wave,.bot.sit .arm-point{animation:none}
+/* bigger bottom controls on touch screens, no sticky hover on phones */
+@media(pointer:coarse){.navbtn{width:50px;height:50px}.lang button{padding:6px 16px}}
+@media(hover:none){
+  .pill:hover:not([aria-pressed=true]),.btn:hover,.navbtn:hover{transform:none}
+  .btn.p:hover{background:var(--red)}
+  .toc button:hover{background:none}
+}
+@media(max-width:560px){
+  .pg{padding:20px 18px 36px}
+  .pgCover::before{inset:14px}
+  .brand{font-size:1.15rem}
+}
+
+/* ---------- robot v2: stands on a ledge, jetpack everywhere else, silent while travelling, talks with his mouth ---------- */
+.ledge{position:absolute;z-index:5;height:0;border-top:3px solid var(--ink);border-radius:3px 2px 4px 2px/2px 3px 2px 3px;pointer-events:none;opacity:.9}
+.ledge::after{content:"";position:absolute;left:5px;right:5px;top:3px;height:6px;background:repeating-linear-gradient(115deg,rgba(56,53,47,.4) 0 2px,transparent 2px 7px);opacity:.65}
+#botTxt{position:relative;display:block}
+#botTxt .gh{visibility:hidden}
+#botTxt .ty{position:absolute;left:0;top:0;width:100%}
+/* no talking while he is on the way somewhere */
+.bot-bub{transition:opacity .18s}
+.bot.moving .bot-bub{opacity:0}
+/* standing on the ledge: planted, gently breathing (no floating) */
+.bot.ground .bot-svg,.bot.stand .bot-svg{animation:breathe 3.6s ease-in-out infinite;transform-origin:50% 100%}
+.bot.ground.walk .bot-svg{animation:walkBob .34s ease-in-out infinite}
+@keyframes breathe{50%{transform:scaleY(1.025)}}
+/* jetpack: legs dangle while he hovers or flies */
+.bot.jet .f1{animation:dangle 1.1s ease-in-out infinite alternate}
+.bot.jet .f2{animation:dangle 1.1s ease-in-out infinite alternate-reverse}
+@keyframes dangle{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
+/* talking: mouth opens and closes while the words appear */
+.bot .talkmouth{display:none;transform-box:fill-box;transform-origin:50% 50%}
+.bot.talk .smile,.bot.talk .frown{display:none}
+.bot.talk .talkmouth{display:inline;animation:talkM .3s ease-in-out infinite alternate}
+@keyframes talkM{0%{transform:scale(.8,.2)}50%{transform:scale(1,.95)}100%{transform:scale(.7,.5)}}
+.bot.talk .ant-ball{animation-duration:.45s}
+
+/* ---------- robot v3: smooth movement, proper falling, broken limbs, nicer get-up, animated words ---------- */
+.bot{left:0;top:0;transition:none;will-change:transform}
+.bot-flip{transition:none}
+.bot-svg{filter:none}
+.bot .shE{display:none}
+.bot.ground .shE,.bot.stand .shE{display:inline}
+/* walk cycle: legs, arms and body all on the same beat */
+.bot.walk .arm-wave{animation:armW .34s ease-in-out infinite alternate}
+.bot.walk .arm-point{transform-origin:90px 100px;transform-box:view-box;animation:armP .34s ease-in-out infinite alternate}
+@keyframes armW{from{transform:rotate(-16deg)}to{transform:rotate(8deg)}}
+@keyframes armP{from{transform:rotate(10deg)}to{transform:rotate(-14deg)}}
+@keyframes walkBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+/* jetpack: longer, faster flames while he travels; coughing flames after the repair */
+.bot.jet.moving .flames{transform-box:fill-box;transform-origin:50% 0;transform:scaleY(1.4)}
+.bot.jet.moving .fl{animation-duration:.08s}
+.bot.jet.sputter .fl{animation:sput .55s steps(1) infinite}
+@keyframes sput{0%{transform:scaleY(1.2)}30%{transform:scaleY(.1)}50%{transform:scaleY(1)}70%{transform:scaleY(.15)}100%{transform:scaleY(1.1)}}
+/* take-off, landing and impact: squash and stretch */
+.bot.liftoff .bot-flip{animation:liftoff .5s ease-out}
+@keyframes liftoff{0%{transform:scale(1,1)}30%{transform:scale(1.07,.85)}65%{transform:scale(.96,1.07)}100%{transform:scale(1,1)}}
+.bot.landing .bot-flip,.bot.thud .bot-flip{animation:landS .45s ease-out}
+@keyframes landS{0%{transform:scale(1,1)}35%{transform:scale(1.1,.82)}70%{transform:scale(.97,1.05)}100%{transform:scale(1,1)}}
+/* broken: arms and legs are gone (they lie on the ground), sockets spark, the jetpack smokes */
+.bot .socket,.bot .smoke,.bot .dizzy,.bot .sparks{display:none}
+.bot.broken .socket,.bot.broken .smoke,.bot.broken .packg{display:inline}
+.bot.broken .arm-wave,.bot.broken .arm-point,.bot.broken .f1,.bot.broken .f2{display:none}
+.bot .smoke circle{transform-box:fill-box;transform-origin:50% 50%;animation:smokeUp 1.8s ease-out infinite}
+@keyframes smokeUp{from{opacity:.6;transform:translateY(0) scale(.6)}to{opacity:0;transform:translateY(-28px) scale(1.8)}}
+.bot.sparkB .sparks{display:inline;animation:sparkF .14s steps(2) infinite}
+.bot.restored .sparks{display:inline;animation:sparkF .1s steps(2) 5}
+@keyframes sparkF{0%{opacity:1}50%{opacity:.15}100%{opacity:1}}
+.bot.fallen.broken .sparks{display:inline;animation:sparkTw 1.7s steps(1) infinite}
+@keyframes sparkTw{0%,8%{opacity:1}9%,51%{opacity:0}52%,58%{opacity:1}59%,100%{opacity:0}}
+.bot.restored .bot-flip{animation:popR .55s cubic-bezier(.2,1.6,.4,1)}
+@keyframes popR{0%{transform:scale(.88)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
+/* lying on the ground (flat on its side, never sinking into the border), stars circling his head */
+.bot.fallen .bot-svg{animation:none;transform:translateY(calc(var(--bw,86px)*-.5)) rotate(calc(var(--dir,1)*90deg));transform-origin:50% 100%;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.bot.fallen .eye{animation:none;transform:scaleY(.25)}
+.bot.fallen .dizzy{display:inline;transform-box:view-box;transform-origin:64px 26px;animation:orbit 1.3s linear infinite}
+@keyframes orbit{to{transform:rotate(360deg)}}
+/* getting up: stumbles, slips back, pushes with both arms, wobbles upright */
+.bot.getup .bot-svg{animation:getUp 2.8s cubic-bezier(.4,0,.3,1) forwards;transform-origin:50% 100%}
+@keyframes getUp{
+  0%{transform:translateY(calc(var(--bw,86px)*-0.500)) rotate(calc(var(--dir,1)*90deg)) scaleY(1)}
+  8%{transform:translateY(calc(var(--bw,86px)*-0.497)) rotate(calc(var(--dir,1)*84deg)) scaleY(1)}
+  18%{transform:translateY(calc(var(--bw,86px)*-0.500)) rotate(calc(var(--dir,1)*90deg)) scaleY(1)}
+  30%{transform:translateY(calc(var(--bw,86px)*-0.457)) rotate(calc(var(--dir,1)*66deg)) scaleY(1)}
+  38%{transform:translateY(calc(var(--bw,86px)*-0.481)) rotate(calc(var(--dir,1)*74deg)) scaleY(1)}
+  52%{transform:translateY(calc(var(--bw,86px)*-0.321)) rotate(calc(var(--dir,1)*40deg)) scaleY(1)}
+  60%{transform:translateY(calc(var(--bw,86px)*-0.372)) rotate(calc(var(--dir,1)*48deg)) scaleY(1)}
+  74%{transform:translateY(calc(var(--bw,86px)*-0.121)) rotate(calc(var(--dir,1)*14deg)) scaleY(1)}
+  82%{transform:translateY(calc(var(--bw,86px)*-0.052)) rotate(calc(var(--dir,1)*-6deg)) scaleY(1.05)}
+  90%{transform:translateY(calc(var(--bw,86px)*-0.026)) rotate(calc(var(--dir,1)*3deg)) scaleY(0.95)}
+  100%{transform:translateY(calc(var(--bw,86px)*-0.000)) rotate(calc(var(--dir,1)*0deg)) scaleY(1)}
+}
+
+.bot.getup .arm-wave{animation:pushL 2.8s ease-in-out forwards}
+.bot.getup .arm-point{transform-origin:90px 100px;transform-box:view-box;animation:pushR 2.8s ease-in-out forwards}
+@keyframes pushL{0%,20%{transform:rotate(0)}30%{transform:rotate(-50deg)}40%{transform:rotate(-15deg)}52%{transform:rotate(-60deg)}62%{transform:rotate(-25deg)}74%{transform:rotate(-70deg)}84%{transform:rotate(10deg)}100%{transform:rotate(0)}}
+@keyframes pushR{0%,20%{transform:rotate(0)}30%{transform:rotate(50deg)}40%{transform:rotate(15deg)}52%{transform:rotate(60deg)}62%{transform:rotate(25deg)}74%{transform:rotate(70deg)}84%{transform:rotate(-10deg)}100%{transform:rotate(0)}}
+.bot.getup .f1{animation:legK .4s ease-in-out 7 alternate}
+.bot.getup .f2{animation:legK .4s ease-in-out 7 alternate-reverse}
+@keyframes legK{from{transform:rotate(-20deg)}to{transform:rotate(20deg)}}
+/* broken parts lying around, dust when he lands */
+.deb{position:absolute;left:0;top:0;z-index:5;pointer-events:none;will-change:transform}
+.deb svg{display:block;overflow:visible}
+.dust{position:absolute;z-index:5;width:10px;height:10px;border-radius:50%;background:rgba(160,152,135,.6);pointer-events:none;animation:dustP .65s ease-out forwards}
+@keyframes dustP{from{opacity:.75;transform:translate(0,0) scale(.5)}to{opacity:0;transform:translate(var(--dx),-12px) scale(2.3)}}
+/* words pop in one by one */
+#botTxt .ty .w{display:inline-block;animation:wIn .28s cubic-bezier(.2,1.7,.4,1) both}
+@keyframes wIn{from{opacity:0;transform:translateY(5px) scale(.82) rotate(-2deg)}to{opacity:1;transform:none}}
+/* ---------- fit & smoothness fixes ---------- */
+/* ghost words are the same inline-block spans as the typed words, so the bubble
+   is always sized for the layout the words will really take */
+#botTxt .gh .w{display:inline-block}
+#botTxt .ty .w.off{animation:none}
+.bot-bub{overflow-wrap:break-word}
+#botTxt .ty .w{max-width:100%}
+/* a soft squash on the body the moment he breaks, so the limbs coming off does not pop */
+.bot.broken .bot-flip{animation:crashJolt .34s ease-out}
+@keyframes crashJolt{0%{transform:scale(1,1)}35%{transform:scale(1.08,.88)}70%{transform:scale(.97,1.04)}100%{transform:scale(1,1)}}
+/* gentler settle into the lying pose */
+.bot.fallen .bot-svg{transition:transform .45s cubic-bezier(.25,1.35,.45,1)}
 </style>
 </head>
 <body>
@@ -221,9 +432,11 @@ footer a:hover{color:var(--red)}
 </header>
 
 <section class="stage" id="stage">
+  <div class="ledge" id="ledge" aria-hidden="true"></div>
   <div class="bot" id="bot" aria-hidden="true">
     <div class="bot-flip" id="botFlip">
     <svg class="bot-svg" viewBox="0 0 128 134">
+      <ellipse class="shE" cx="64" cy="132" rx="36" ry="3.6" fill="rgba(56,53,47,.22)"/>
       <line x1="64" y1="16" x2="64" y2="30" stroke="#38352f" stroke-width="3.5" stroke-linecap="round"/>
       <circle class="ant-ball" cx="64" cy="10" r="6.5" fill="#f0dfa0" stroke="#38352f" stroke-width="3"/>
       <rect x="10" y="54" width="9" height="22" rx="4" fill="#9e3a2e" stroke="#38352f" stroke-width="3"/>
@@ -237,16 +450,28 @@ footer a:hover{color:var(--red)}
         <circle cx="116" cy="93" r="6.5" fill="#fcf8ef" stroke="#38352f" stroke-width="3"/>
         <path d="M120 90 L127 91" stroke="#38352f" stroke-width="3.5" stroke-linecap="round"/>
       </g>
-      <rect x="16" y="28" width="96" height="66" rx="25" fill="#fcf8ef" stroke="#38352f" stroke-width="3.5"/>
+      <rect class="bface" x="16" y="28" width="96" height="66" rx="25" fill="#fcf8ef" stroke="#38352f" stroke-width="3.5"/>
       <circle class="eye" cx="47" cy="58" r="5.5" fill="#38352f"/>
       <circle class="eye" cx="81" cy="58" r="5.5" fill="#38352f"/>
-      <ellipse cx="34" cy="70" rx="6.5" ry="4" fill="#9e3a2e" opacity=".45"/>
-      <ellipse cx="94" cy="70" rx="6.5" ry="4" fill="#9e3a2e" opacity=".45"/>
-      <path d="M54 70 Q64 79 74 70" fill="none" stroke="#38352f" stroke-width="3.5" stroke-linecap="round"/>
+      <ellipse class="cheek" cx="34" cy="70" rx="6.5" ry="4" fill="#9e3a2e" opacity=".45"/>
+      <ellipse class="cheek" cx="94" cy="70" rx="6.5" ry="4" fill="#9e3a2e" opacity=".45"/>
+      <path class="smile" d="M54 70 Q64 79 74 70" fill="none" stroke="#38352f" stroke-width="3.5" stroke-linecap="round"/>
+      <ellipse class="talkmouth" cx="64" cy="73" rx="7.5" ry="6" fill="#38352f"/>
+      <path class="brow" d="M35 43 L59 52 M93 43 L69 52" fill="none" stroke="#38352f" stroke-width="5" stroke-linecap="round"/>
+      <path class="frown" d="M52 78 Q64 66 76 78" fill="none" stroke="#38352f" stroke-width="4" stroke-linecap="round"/>
+      <ellipse class="scream" cx="64" cy="75" rx="8.5" ry="10.5" fill="#38352f"/>
+      <path class="sadbrow" d="M36 50 L58 42 M92 50 L70 42" fill="none" stroke="#38352f" stroke-width="4.5" stroke-linecap="round"/>
+      <path class="tear" d="M40 63 q-4 7 0 10 q4 -3 0 -10z" fill="#7fb3e6" stroke="#38352f" stroke-width="1.5"/>
+      <g class="packg"><rect x="29" y="98" width="11" height="18" rx="3" fill="#7c2c22" stroke="#38352f" stroke-width="2.5"/><rect x="88" y="98" width="11" height="18" rx="3" fill="#7c2c22" stroke="#38352f" stroke-width="2.5"/></g>
+      <g class="flames"><g class="fl"><path d="M29.5 117 Q34.5 150 39.5 117 Z" fill="#f59e0b"/><path d="M32 117 Q34.5 138 37 117 Z" fill="#fde68a"/></g><g class="fl"><path d="M88.5 117 Q93.5 150 98.5 117 Z" fill="#f59e0b"/><path d="M91 117 Q93.5 138 96 117 Z" fill="#fde68a"/></g></g>
       <rect x="38" y="94" width="52" height="29" rx="12" fill="#9e3a2e" stroke="#38352f" stroke-width="3.5"/>
       <path d="M64 101 l3.2 6.4 7 1 -5 4.9 1.2 7 -6.4 -3.4 -6.4 3.4 1.2 -7 -5 -4.9 7 -1 z" fill="#f0dfa0" stroke="#38352f" stroke-width="2" stroke-linejoin="round"/>
       <rect class="f1" x="44" y="123" width="13" height="8" rx="3.5" fill="#38352f"/>
       <rect class="f2" x="71" y="123" width="13" height="8" rx="3.5" fill="#38352f"/>
+      <g class="socket" fill="#b3ac9d" stroke="#38352f" stroke-width="2"><circle cx="38" cy="100" r="3.4"/><circle cx="90" cy="100" r="3.4"/><circle cx="50.5" cy="123" r="2.8"/><circle cx="77.5" cy="123" r="2.8"/></g>
+      <g class="smoke" fill="#8f897c"><circle cx="34" cy="96" r="4"/><circle cx="94" cy="96" r="4" style="animation-delay:.6s"/><circle cx="36" cy="93" r="3" style="animation-delay:1.1s"/></g>
+      <g class="sparks" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M38 100l-7 -6 5 0 -6 -8M90 100l7 -6 -5 0 6 -8M50 124l-5 6 4 0 -4 6M78 124l5 6 -4 0 4 6" stroke="#38352f" stroke-width="4.5"/><path d="M38 100l-7 -6 5 0 -6 -8M90 100l7 -6 -5 0 6 -8M50 124l-5 6 4 0 -4 6M78 124l5 6 -4 0 4 6" stroke="#fde68a" stroke-width="2"/></g>
+      <g class="dizzy"><path d="M90.0 21.0 L91.8 24.2 L95.0 26.0 L91.8 27.8 L90.0 31.0 L88.2 27.8 L85.0 26.0 L88.2 24.2Z" fill="#f0dfa0" stroke="#38352f" stroke-width="1.6" stroke-linejoin="round"/><path d="M51.0 43.5 L52.8 46.7 L56.0 48.5 L52.8 50.3 L51.0 53.5 L49.2 50.3 L46.0 48.5 L49.2 46.7Z" fill="#f0dfa0" stroke="#38352f" stroke-width="1.6" stroke-linejoin="round"/><path d="M51.0 -1.5 L52.8 1.7 L56.0 3.5 L52.8 5.3 L51.0 8.5 L49.2 5.3 L46.0 3.5 L49.2 1.7Z" fill="#f0dfa0" stroke="#38352f" stroke-width="1.6" stroke-linejoin="round"/></g>
     </svg>
     </div>
     <div class="bot-bub"><span id="botTxt"></span></div>
@@ -501,6 +726,7 @@ cover:["বইটা খুলতে কভারে ছোঁও তো!","খ�
 inside:["ভেতরে ঢুকেই গেলে! এবার পেজ উল্টাও।","বই খুলে গেছে! এগিয়ে যাও।","এটা বইয়ের ভেতরের পাতা — সামনে আরও আছে!"],
 title:["এটা নাশিদের নিজের লাইব্রেরি!","স্বাগতম! ঘুরে ঘুরে দেখো।","সব অ্যাপ এক তাকে সাজানো আছে!"],
 contents:["কোন অ্যাপটা চাই? নামের ওপর ছোঁও!","তালিকা থেকে পছন্দেরটা বেছে নাও!","নিজস্ব স্টুডিওটা দেখেছ? নামে ছোঁও!"],
+appm:["এই যে অ্যাপটা! নিচের বাটনে ছুঁলেই পাবে।","বাটনে ছুঁয়ে ডাউনলোড বা চালিয়ে দেখো!","পছন্দ হলে নিচের বাটনটা ছোঁও!"],
 app:["এই যে অ্যাপটা! বাটনটা দেখিয়ে দিচ্ছি।","দাঁড়াও, বাটনের কাছেই যাচ্ছি!","এই অ্যাপটাই খুঁজছিলে তো?"],
 dl:["এখানে ক্লিক করলে তুমি ডাউনলোড করতে পারবা!","এই বাটনটাই! ক্লিক করলেই ডাউনলোড হবে!","দেখো, আমি টিপে দেখাচ্ছি — এখানে ক্লিক করো!"],
 more:["আরও অ্যাপ আসছে, একটু অপেক্ষা করো!","নতুন অ্যাপ এলেই এখানে পাবে!","আরও বানানো চলছে!"],
@@ -508,12 +734,14 @@ end:["বই শেষ! আবার শুরু থেকে পড়ো?","�
 idle1:["কী হলো, থেমে গেলে? পেজটা উল্টাও!","ঘুমিয়ে গেলে নাকি? পরের পেজটা দেখো!","আরেহ, থেমে আছ কেন? এগিয়ে যাও!"],
 idleDo:["ঠিক আছে, আমিই উল্টে দিচ্ছি!","দাঁড়াও, আমি পেজ উল্টে দিচ্ছি!"],
 quip:["ঘুরে ঘুরে সব দেখছি!","বইটা দারুণ, তাই না?","আমি পাহারায় আছি!","লাইব্রেরিটা গুছিয়ে রাখছি!"],
+grumpy:["আমাকে ধাক্কা দিলে কেন?","আমার মাথায় ব্যথা লেগেছে!","আমি কি বলের মতো দেখতে?","আর এমন করো না, প্লিজ!"],
 ouch:["উফ! মাথায় লাগলো!","আউচ! ব্যথা পেলাম!","উফ, ধাক্কা খেলাম!","মাথাটা ঝিমঝিম করছে!"]},
 en:{hello:"Hello! I'm your robot buddy.",
 cover:["Tap the cover to open the book!","Go on, open it — great apps inside!","What's up? No mood to open today?","I'm ready! One tap opens the book.","Just one tap and it opens!"],
 inside:["You're in! Now turn the page.","The book is open — keep going!","This is the inside cover — more ahead!"],
 title:["This is Nasheed's very own library!","Welcome! Have a look around.","All the apps, shelved in one place!"],
 contents:["Which app do you want? Tap its name!","Pick one from the list!","Seen Nijashwa Studio? Tap its name!"],
+appm:["Here's the app! Tap a button below.","Tap a button to download or open it!","Like it? Tap the button below!"],
 app:["Here's the app! Let me show you the button.","Hang on, heading to the button!","Is this the one you wanted?"],
 dl:["Click here and you can download it!","This is the button — click to download!","Watch me tap it — click right here!"],
 more:["More apps are coming, stay tuned!","New apps will land right here!","More are being built!"],
@@ -521,9 +749,11 @@ end:["The end! Want to read it again?","Last page! Did you like it?","That's all
 idle1:["Hey, don't stop — turn the page!","Fallen asleep? Check the next page!","Still here? Keep going!"],
 idleDo:["Okay, I'll turn it for you!","Wait, I'll turn the page!"],
 quip:["Just wandering around!","Lovely book, isn't it?","I'm on guard duty!","Tidying up the library!"],
+grumpy:["Why did you push me?","My head really hurts!","Do I look like a ball to you?","Please don't do that again!"],
 ouch:["Ouch! My head!","Ow! That hurt!","Oof, I crashed!","My head is spinning!"]}};
 var botEl=$("#bot"),botFlip=$("#botFlip"),botTxt=$("#botTxt"),lastAct=Date.now(),idleWarned=false,warnAt=0,botKey="",botWalkT=null,curKind="",botBtn=null,botPressIv=null,botSeq=0,endSaid=false,botHeld=false,botFly=null,downUntil=0,recoverT=null;
-var lastLine={};
+var lastLine={},lastQuip=0,pressN=0;
+var botMoving=false,pendTxt=null,talkT=null,ghEl=null,tyEl=null,ledgeEl=$("#ledge"),HOME={x:10,y:10},LEDGE={x0:8,x1:0,y:0},pos={x:10,y:10},mvTok=0,tiltV=0,deb=[],debTok=0;
 function pickLine(k){
   var pool=BOTL[lang]&&BOTL[lang][k];
   if(!pool)return k;
@@ -531,9 +761,46 @@ function pickLine(k){
   var s=pool[Math.floor(Math.random()*pool.length)];
   if(pool.length>1&&s===lastLine[k])s=pool[(pool.indexOf(s)+1)%pool.length];
   lastLine[k]=s;return s}
-function botSay(k){botKey=k;if(!botTxt)return;botTxt.textContent=pickLine(k);
+/* words appear one by one while the mouth moves; nothing is said while he is travelling */
+function stopTalk(){clearTimeout(talkT);talkT=null;if(botEl)botEl.classList.remove("talk")}
+function wordSpans(txt,cls){
+  var f=document.createDocumentFragment();
+  txt.split(/(\s+)/).forEach(function(w){
+    if(!w)return;
+    if(/^\s+$/.test(w)){f.appendChild(document.createTextNode(" "));return}
+    var s=document.createElement("span");s.className=cls;s.textContent=w;f.appendChild(s)});
+  return f}
+function setBubble(txt,anim){
+  if(!ghEl||!tyEl)return;
+  stopTalk();
+  /* the hidden ghost must lay out EXACTLY like the typed words (the same word
+     spans), otherwise the bubble is sized for one layout while the words render
+     in another — and the last line spills outside the border */
+  ghEl.textContent="";ghEl.appendChild(wordSpans(txt,"w"));shownLang=lang;
+  if(!anim){tyEl.textContent="";tyEl.appendChild(wordSpans(txt,"w off"));return}
+  var ws=txt.split(/(\s+)/),i=0,cl=botEl.classList;
+  tyEl.textContent="";
+  if(!(cl.contains("hurt")||cl.contains("sad")||cl.contains("fallen")||cl.contains("mute")))cl.add("talk");
+  /* every word pops in, one after the other, in time with the mouth */
+  (function step(){
+    if(!botEl)return;
+    if(i>=ws.length){talkT=setTimeout(function(){if(botEl)botEl.classList.remove("talk")},180);return}
+    var w=ws[i++];
+    if(!w){step();return}
+    if(/^\s+$/.test(w)){tyEl.appendChild(document.createTextNode(" "));step();return}
+    var sp=document.createElement("span");sp.className="w";sp.textContent=w;tyEl.appendChild(sp);
+    talkT=setTimeout(step,90+w.length*32)})()}
+function speak(t){
+  pendTxt=null;if(!botTxt)return;
+  setBubble(t,true);
   var bub=botTxt.parentNode;if(bub&&bub.classList){bub.classList.remove("pop");void bub.offsetWidth;bub.classList.add("pop")}}
-function robotRefresh(){if(botTxt&&botKey)botTxt.textContent=pickLine(botKey)}
+function botSay(k){botKey=k;var t=pickLine(k);if(botMoving||!botTxt){pendTxt=t;return}speak(t)}
+var shownLang="";
+function robotRefresh(){
+  /* only re-pick the line when the language changed, so a page redraw never cuts him off mid-sentence */
+  if(!botTxt||!botKey||shownLang===lang)return;
+  var t=pickLine(botKey);
+  if(pendTxt!=null)pendTxt=t;else{setBubble(t,false)}}
 function kindOf(i){return pageEls[i]?pageEls[i].dataset.kind||"":""}
 function currentKind(){
   if(MODE==="S"){if(F===0)return"cover";var a=kindOf(Math.min(2*F,NP-1)),b=kindOf(2*F-1);
@@ -546,29 +813,77 @@ function stagePos(el,place){
   else{x=r.left-sr.left+r.width/2-bw/2;y=r.top-sr.top-bh+10}
   x=Math.max(2,Math.min(sr.width-bw-2,x));y=Math.max(2,Math.min(sr.height-bh-2,y));
   return{left:x,top:y}}
-function faceFor(x){if(!botEl)return;var sw=stage.clientWidth||1000;botEl.classList.toggle("flip",x>sw/2-30)}
+var botBubEl=null;
+function faceFor(x){if(!botEl)return;var sw=stage.clientWidth||1000,fl=x>sw/2-30;botEl.classList.toggle("flip",fl);
+  if(!botBubEl)botBubEl=botEl.querySelector(".bot-bub");
+  if(botBubEl){var bw=botEl.offsetWidth||60,sp=fl?x-14:sw-x-bw-14;botBubEl.style.maxWidth=Math.max(110,Math.min(210,sp))+"px"}}
 function clampX(x){var sw=stage.clientWidth||1000,bw=(botEl&&botEl.offsetWidth)||240;return Math.max(2,Math.min(sw-bw-2,x))}
-function botWalk(x,y,faceRight){
+/* position: the robot is moved with transform (smooth, GPU) – no layout work while he moves */
+function setPos(x,y){pos.x=x;pos.y=y;if(botEl)botEl.style.transform="translate3d("+x+"px,"+y+"px,0)"}
+function setTilt(a){tiltV=a;if(botFlip)botFlip.style.transform=a?"rotate("+a.toFixed(2)+"deg)":""}
+function easeIO(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+function stopMove(){mvTok++;clearTimeout(botWalkT)}
+function anim(c,ms){var cl=botEl.classList;cl.remove(c);void botEl.offsetWidth;cl.add(c);setTimeout(function(){if(botEl)botEl.classList.remove(c)},ms)}
+/* walk = steady, flight = eased with a small arc and a lean into the direction of travel */
+function tween(x1,y1,ms,fly,done){
+  var tok=++mvTok,x0=pos.x,y0=pos.y,t0=performance.now(),px=x0,pt=t0,fin=false;
+  var lift=fly?Math.min(22,Math.hypot(x1-x0,y1-y0)*.07):0;
+  function end(){if(fin||tok!==mvTok)return;fin=true;setPos(x1,y1);setTilt(0);if(done)done()}
+  function f(now){
+    if(fin||tok!==mvTok)return;
+    var t=Math.min(1,(now-t0)/ms),e=fly?easeIO(t):t;
+    var x=x0+(x1-x0)*e,y=y0+(y1-y0)*e-Math.sin(Math.PI*t)*lift;
+    if(fly){var dt=Math.max(1,now-pt),vx=(x-px)/dt*1000;setTilt(tiltV+(Math.max(-13,Math.min(13,vx*.016))-tiltV)*.18)}
+    px=x;pt=now;setPos(x,y);
+    if(t<1)requestAnimationFrame(f);else end()}
+  requestAnimationFrame(f);
+  clearTimeout(botWalkT);botWalkT=setTimeout(end,ms+80)}
+/* the ledge: his home. He walks only on it; anywhere else he flies with the jetpack. */
+function homeCalc(){var sw=stage.clientWidth||1000;HOME.x=sw<900?8:10;HOME.y=sw<900?6:10}
+function placeLedge(){
+  if(!botEl||!ledgeEl)return;
+  homeCalc();
+  var sw=stage.clientWidth||1000,bh=botEl.offsetHeight||56,w=sw<900?sw-16:Math.min(260,sw-16);
+  LEDGE.x0=8;LEDGE.x1=8+w;LEDGE.y=HOME.y+bh*.978;
+  botEl.style.setProperty("--bw",(botEl.offsetWidth||86)+"px");
+  ledgeEl.style.left="8px";ledgeEl.style.width=w+"px";ledgeEl.style.top=Math.round(LEDGE.y)+"px"}
+function onLedge(x,y){var bw=(botEl&&botEl.offsetWidth)||56;return Math.abs(y-HOME.y)<=7&&x>=LEDGE.x0-3&&x<=LEDGE.x1-bw+3}
+function settleClass(){
+  var g=onLedge(pos.x,pos.y);
+  botEl.classList.toggle("ground",g);botEl.classList.toggle("jet",!g)}
+function arrive(x,y){
   if(!botEl)return;
-  x=clampX(x);faceFor(x);
-  var cx=parseFloat(botEl.style.left)||10;
-  if(botFlip)botFlip.style.transform=x<cx-4?"scaleX(-1)":"";
-  botEl.classList.add("walk");
-  botEl.style.left=x+"px";botEl.style.top=y+"px";
-  clearTimeout(botWalkT);botWalkT=setTimeout(function(){botEl.classList.remove("walk");if(botFlip)botFlip.style.transform=faceRight===false?"scaleX(-1)":""},1520)}
-function botHome(){botWalk(10,10,true)}
+  botMoving=false;
+  var cl=botEl.classList,wasJet=cl.contains("jet"),g=onLedge(x,y);
+  cl.remove("moving","walk");
+  cl.toggle("ground",g);
+  cl.toggle("jet",!g&&!cl.contains("sit"));
+  if(g&&wasJet)anim("landing",460);
+  if(pendTxt!=null)speak(pendTxt)}
+/* one way to travel: on the ledge -> walk, otherwise -> jetpack. Returns how long it takes (ms). */
+function botGo(x,y,faceRight){
+  if(!botEl)return 0;
+  x=clampX(x);y=Math.max(2,y);
+  if(onLedge(x,y))y=HOME.y;
+  faceFor(x);
+  var d=Math.hypot(x-pos.x,y-pos.y);
+  if(d<3){stopMove();setPos(x,y);arrive(x,y);return 0}
+  var walk=onLedge(pos.x,pos.y)&&onLedge(x,y);
+  var ms=walk?Math.max(500,d/95*1000):Math.max(1000,Math.min(2400,750+d*1.2));
+  stopTalk();botMoving=true;
+  var cl=botEl.classList,wasG=cl.contains("ground")||cl.contains("stand");
+  cl.add("moving");cl.remove("ground","stand","landing");cl.toggle("walk",walk);cl.toggle("jet",!walk);
+  if(!walk&&wasG)anim("liftoff",520);
+  tween(x,y,ms,!walk,function(){arrive(x,y)});
+  return ms+80}
+function botWalk(x,y,faceRight){return botGo(x,y,faceRight)}
+function botHome(){return botGo(HOME.x,HOME.y,true)}
 function stopPress(){if(botPressIv){clearInterval(botPressIv);botPressIv=null}botBtn=null}
 function botPress(){
-  if(!botBtn||!botEl){stopPress();return}
+  if(!botBtn||!botEl||++pressN>3){stopPress();return}
   botEl.classList.add("pressing");botBtn.classList.add("bot-tap");
   setTimeout(function(){if(botEl)botEl.classList.remove("pressing");if(botBtn)botBtn.classList.remove("bot-tap")},480)}
-function botJumpTo(x,y){
-  if(!botEl)return;
-  x=clampX(x);faceFor(x);
-  botEl.style.transitionDuration=".85s,.85s";
-  botEl.classList.add("jump");botEl.classList.remove("walk");
-  botEl.style.left=x+"px";botEl.style.top=y+"px";
-  setTimeout(function(){botEl.classList.remove("jump");botEl.style.transitionDuration=""},880)}
+function botJumpTo(x,y){return botGo(x,y,true)}
 function reactToKind(k){
   if(!k||k===curKind)return;curKind=k;stopPress();var seq=++botSeq;
   if(k==="app"){
@@ -576,17 +891,17 @@ function reactToKind(k){
     for(j=0;j<idxs.length;j++){if(kindOf(idxs[j])==="app"){pg=pageEls[idxs[j]];break}}
     if(!pg)pg=pageEls[idxs[0]];
     var btn=pg&&pg.querySelector?(pg.querySelector(".btn.p")||pg.querySelector(".btn")):null;
-    if(btn){
-      botBtn=btn;
+    if(btn&&MODE==="S"){
+      botBtn=btn;pressN=0;
       var above=stagePos(btn,"above"),land=stagePos(btn,"leftOf");
-      botWalk(above.left,above.top,true);botSay("app");
+      var t1=botWalk(above.left,above.top,true);botSay("app");
       setTimeout(function(){
         if(seq!==botSeq||curKind!=="app")return;
-        botJumpTo(land.left,land.top);botSay("dl");
+        var t2=botJumpTo(land.left,land.top);botSay("dl");
         setTimeout(function(){
           if(seq!==botSeq||curKind!=="app")return;
-          botPress();botPressIv=setInterval(botPress,2300);if(botPressIv.unref)botPressIv.unref()},950)},1600)}
-    else{botHome();botSay("app")}
+          botPress();botPressIv=setInterval(botPress,2300);if(botPressIv.unref)botPressIv.unref()},t2+500)},t1+2100)}
+    else{botHome();botSay(MODE==="S"?"app":"appm")}
     return}
   if(k==="contents"){var pos2=stagePos(wrap,"aboveRight");botWalk(pos2.left,pos2.top,true);botSay("contents");return}
   botHome();botSay(k)}
@@ -601,19 +916,19 @@ function botTick(){
       idleWarned=true;return}
     if(k!==curKind)reactToKind(k);
     if(!idleWarned){idleWarned=true;warnAt=now;botSay("idle1")}
-    else if(now-warnAt>5000){
-      idleWarned=false;botSay("idleDo");next();
-      setTimeout(function(){curKind="__";if(Date.now()-lastAct>=3000&&!botHeld&&!botFly)reactToKind(currentKind())},1900)}
     return}
   idleWarned=false;
   /* the robot only speaks once the visitor has stood idle on a page for ~3s —
      while they are busy turning pages it stays quiet */
-  if(k!==curKind&&idle>=3000)reactToKind(k);
-  if(idle>7000&&!atEnd()&&(k==="title"||k==="more"||k==="end"||k==="inside")&&Math.random()<.4){
-    var sr=stage.getBoundingClientRect(),bw=botEl.offsetWidth||86,bh=botEl.offsetHeight||150;
-    var spots=[{left:10,top:10},{left:sr.width-bw-12,top:10},{left:12,top:sr.height-bh-76},{left:sr.width-bw-12,top:sr.height-bh-76}];
-    var s=spots[Math.floor(Math.random()*spots.length)];
-    botWalk(s.left,s.top);botSay("quip")}}
+  if(k!==curKind&&idle>=1300)reactToKind(k);
+  if(idle>8000&&now-lastQuip>14000&&!atEnd()&&(k==="title"||k==="more"||k==="end"||k==="inside")&&Math.random()<.5){
+    lastQuip=now;
+    /* he stays on his ledge; at most he strolls a few steps along it, silently, then speaks once he stops */
+    var bw=botEl.offsetWidth||56,cx=pos.x,cy=pos.y;
+    if(onLedge(cx,cy)){
+      var nx=LEDGE.x0+2+Math.random()*Math.max(0,LEDGE.x1-LEDGE.x0-bw-4);
+      if(Math.abs(nx-cx)>50)botGo(nx,HOME.y)}
+    botSay("quip")}}
 ["pointerdown","keydown","wheel","touchstart"].forEach(function(ev){addEventListener(ev,function(){lastAct=Date.now();idleWarned=false;endSaid=false},{passive:true})});
 /* grab, drag and fling the robot: it flies, bumps the stage walls, cries ouch,
    rests where it lands, then gets up and walks back to its post */
@@ -622,14 +937,195 @@ function scheduleRecover(ms){
   clearTimeout(recoverT);
   recoverT=setTimeout(function(){
     if(!botEl)return;
-    botEl.classList.remove("hurt");downUntil=0;botEl.style.transition="";
+    botEl.classList.remove("hurt","angry","flying","mute");downUntil=0;routBusy=false;botEl.style.transition="";
     setTimeout(function(){curKind="__";reactToKind(currentKind())},40)},ms)}
-function botGrab(e){
+var flyTok=0,routTok=0,routBusy=false,hitCount=0,hitAt=0;
+var ROUT_CLS=["fallen","getup","jet","above","mute","sit","sad","angry","hurt","hop","flying","moving","talk","stand","restored","sputter","thud","landing","liftoff"];
+function after(tok,ms,fn){return setTimeout(function(){if(tok===routTok&&botEl)fn()},ms)}
+function routEnd(){
+  routTok++;routBusy=false;
   if(!botEl)return;
-  botHeld=true;botSeq++;stopPress();clearTimeout(botWalkT);clearTimeout(recoverT);
-  botEl.classList.remove("walk","hurt","jump");downUntil=0;
-  dragInfo={lx:parseFloat(botEl.style.left)||10,ly:parseFloat(botEl.style.top)||10,sx:e.clientX,sy:e.clientY,moves:[{t:Date.now(),x:e.clientX,y:e.clientY}]};
-  botEl.style.transition="none";botEl.classList.add("held");
+  ROUT_CLS.forEach(function(c){botEl.classList.remove(c)});
+  if(botBubEl)botBubEl.style.maxWidth="";
+  setTilt(0)}
+function botSayRaw(txt){botKey="";if(botMoving){pendTxt=txt;return}speak(txt)}
+
+/* ---- the places he can stand on or fall onto: his ledge, the top and bottom edge of the book, the stage floor ---- */
+function bookRect(){
+  var sr=stage.getBoundingClientRect(),b=(bookEl||wrap).getBoundingClientRect();
+  var l=b.left-sr.left,r=b.right-sr.left;
+  if(MODE==="S"&&F===0)l=l+(r-l)/2;           /* closed book = only the cover half is visible */
+  return{l:l,r:r,t:b.top-sr.top,b:b.bottom-sr.top}}
+function surfaces(){
+  var sr=stage.getBoundingClientRect(),b=bookRect(),h=sr.height,s=[];
+  s.push({y:LEDGE.y,x0:LEDGE.x0,x1:LEDGE.x1});
+  if(b.r-b.l>40){
+    if(b.t>20&&b.t<h-20)s.push({y:b.t,x0:b.l,x1:b.r});
+    if(b.b>40&&b.b<h-2)s.push({y:b.b-1,x0:b.l,x1:b.r})}
+  s.push({y:h-3,x0:-9999,x1:9999});
+  return s}
+function landOn(ss,xc,f0,f1){
+  var best=null;
+  for(var i=0;i<ss.length;i++){var p=ss[i];
+    if(xc>=p.x0&&xc<=p.x1&&f0<=p.y+1&&f1>=p.y&&(!best||p.y<best.y))best=p}
+  return best}
+function puff(cx,y){
+  for(var i=0;i<5;i++){
+    var d=document.createElement("i");d.className="dust";
+    d.style.left=(cx-5+(i-2)*6)+"px";d.style.top=(y-8)+"px";d.style.setProperty("--dx",((i-2)*14)+"px");
+    stage.appendChild(d);
+    (function(n){setTimeout(function(){if(n.parentNode)n.parentNode.removeChild(n)},720)})(d)}}
+function thud(){anim("thud",460)}
+function flashSparks(ms){
+  var cl=botEl.classList;cl.add("sparkB");
+  setTimeout(function(){if(botEl)botEl.classList.remove("sparkB")},ms||1500)}
+
+/* ---- broken arms and legs: the pieces really fall off, bounce and lie on the ground ---- */
+var DEBP=[
+ {vb:[3,60,40,45],dx:-1,svg:'<path d="M38 100 Q18 94 13 74" fill="none" stroke="#38352f" stroke-width="6" stroke-linecap="round"/><circle cx="12" cy="69" r="7" fill="#fcf8ef" stroke="#38352f" stroke-width="3"/>'},
+ {vb:[86,84,44,22],dx:1,svg:'<path d="M90 100 Q106 102 114 95" fill="none" stroke="#38352f" stroke-width="6" stroke-linecap="round"/><circle cx="116" cy="93" r="6.5" fill="#fcf8ef" stroke="#38352f" stroke-width="3"/><path d="M120 90 L127 91" stroke="#38352f" stroke-width="3.5" stroke-linecap="round"/>'},
+ {vb:[42,121,17,12],dx:-1,svg:'<rect x="44" y="123" width="13" height="8" rx="3.5" fill="#38352f"/>'},
+ {vb:[69,121,17,12],dx:1,svg:'<rect x="71" y="123" width="13" height="8" rx="3.5" fill="#38352f"/>'}];
+function clearDebris(){
+  debTok++;
+  deb.forEach(function(d){if(d.el.parentNode)d.el.parentNode.removeChild(d.el)});
+  deb=[]}
+function debDraw(d){d.el.style.transform="translate3d("+d.x+"px,"+d.y+"px,0) rotate("+d.a+"deg)"}
+function spawnDebris(vx0,vy0){
+  clearDebris();
+  var s=(botEl.offsetWidth||86)/128,tok=debTok,ss=surfaces(),sr=stage.getBoundingClientRect();
+  DEBP.forEach(function(p){
+    var w=p.vb[2]*s,h=p.vb[3]*s,el=document.createElement("div");
+    el.className="deb";
+    el.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+p.vb.join(" ")+'" width="'+w+'" height="'+h+'">'+p.svg+'</svg>';
+    stage.appendChild(el);
+    var d={el:el,x:pos.x+p.vb[0]*s,y:pos.y+p.vb[1]*s,w:w,h:h,
+      vx:p.dx*(140+Math.random()*180)+(vx0||0)*.25,vy:-(220+Math.random()*320)+(vy0||0)*.25,
+      a:0,vr:(Math.random()-.5)*520,rest:false,settled:false,ta:0};
+    deb.push(d);debDraw(d)});
+  var last=performance.now(),G=2300;
+  function step(now){
+    if(tok!==debTok)return;
+    var dt=Math.min(.035,(now-last)/1000),live=0;last=now;
+    deb.forEach(function(d){
+      if(d.settled)return;
+      live++;
+      if(d.rest){d.a+=(d.ta-d.a)*.3;if(Math.abs(d.ta-d.a)<.3){d.a=d.ta;d.settled=true}debDraw(d);return}
+      var pb=d.y+d.h;
+      d.vy+=G*dt;d.vx*=Math.pow(.99,dt*60);d.x+=d.vx*dt;d.y+=d.vy*dt;d.a+=d.vr*dt;
+      if(d.x<0){d.x=0;d.vx=Math.abs(d.vx)*.5}
+      if(d.x>sr.width-d.w){d.x=sr.width-d.w;d.vx=-Math.abs(d.vx)*.5}
+      var p=d.vy>0?landOn(ss,d.x+d.w/2,pb,d.y+d.h):null;
+      if(p){d.y=p.y-d.h;
+        if(d.vy>300){d.vy=-d.vy*.38;d.vx*=.7;d.vr*=.55}
+        else{d.vy=0;d.vx=0;d.vr=0;d.rest=true;d.ta=Math.round(d.a/180)*180+(Math.random()-.5)*14}}
+      debDraw(d)});
+    if(live)requestAnimationFrame(step)}
+  requestAnimationFrame(step)}
+function sockPoint(i){
+  var sk=botEl.querySelectorAll(".socket circle")[i],sr=stage.getBoundingClientRect();
+  if(!sk)return{x:pos.x+30,y:pos.y+50};
+  var r=sk.getBoundingClientRect();
+  return{x:r.left-sr.left+r.width/2,y:r.top-sr.top+r.height/2}}
+/* the pieces fly back to their sockets and snap on */
+function returnDebris(done){
+  if(!deb.length){botEl.classList.remove("broken");if(done)done();return}
+  var tok=++debTok,t0=performance.now(),ms=900,st=deb.map(function(d){return{x:d.x,y:d.y,a:d.a}});
+  function f(now){
+    if(tok!==debTok)return;
+    var t=Math.min(1,(now-t0)/ms),e=t*t*(3-2*t);
+    deb.forEach(function(d,i){
+      var sp=sockPoint(i),tx=sp.x-d.w/2,ty=sp.y-d.h/2;
+      d.x=st[i].x+(tx-st[i].x)*e;d.y=st[i].y+(ty-st[i].y)*e-Math.sin(Math.PI*t)*46;
+      d.a=st[i].a*(1-e)+e*360*(i%2?-1:1);debDraw(d)});
+    if(t<1){requestAnimationFrame(f);return}
+    clearDebris();
+    var cl=botEl.classList;cl.remove("broken");cl.add("restored");flashSparks(650);
+    setTimeout(function(){if(botEl)botEl.classList.remove("restored")},650);
+    if(done)done()}
+  requestAnimationFrame(f)}
+
+/* ---- falling: jetpack dead, gravity on. He drops onto the first border below him and stays there. ---- */
+function botFall(vx,vy,onRest){
+  if(!botEl)return;
+  var tok=++flyTok;stopMove();
+  var sr=stage.getBoundingClientRect(),bw=botEl.offsetWidth||56,bh=botEl.offsetHeight||56,fy=bh*.978,ss=surfaces(),lastT=performance.now(),G=2300;
+  botFly={};botMoving=false;pendTxt=null;stopTalk();
+  var cl=botEl.classList;cl.remove("flying","ground","stand","jet","walk","moving","talk","landing","liftoff");
+  function step(now){
+    if(tok!==flyTok||!botEl)return;
+    var dt=Math.min(.035,(now-lastT)/1000);lastT=now;
+    var pf=pos.y+fy;
+    vy+=G*dt;vx*=Math.pow(.988,dt*60);
+    var x=pos.x+vx*dt,y=pos.y+vy*dt;
+    if(x<0){x=0;vx=Math.abs(vx)*.4}
+    if(x>sr.width-bw){x=sr.width-bw;vx=-Math.abs(vx)*.4}
+    if(y<0){y=0;vy=Math.abs(vy)*.3}
+    var p=vy>0?landOn(ss,x+bw/2,pf,y+fy):null;
+    if(p){
+      y=p.y-fy;
+      if(vy>380){puff(x+bw/2,p.y);thud();setPos(x,y);vy=-vy*.28;vx*=.6;requestAnimationFrame(step);return}
+      puff(x+bw/2,p.y);thud();setPos(x,y);setTilt(0);botFly=null;
+      if(onRest)onRest(p);return}
+    setPos(x,y);faceFor(x);setTilt(Math.max(-10,Math.min(10,vx*.015)));
+    requestAnimationFrame(step)}
+  requestAnimationFrame(step)}
+
+/* ---- after a crash: lies there, parts come back, gets up, jetpack coughs, grumbles, flies home ---- */
+function lieDown(){
+  var tok=++routTok;routBusy=true;botFly=null;
+  var cl=botEl.classList,bw=botEl.offsetWidth||56,sw=stage.clientWidth||1000;
+  botEl.style.setProperty("--dir",pos.x+bw/2<sw/2?"1":"-1");
+  cl.remove("flying","ground","stand","jet","walk","moving","talk","hop");
+  cl.add("mute","fallen","hurt","angry","broken");
+  setTilt(0);
+  after(tok,1000,function(){cl.remove("hurt")});
+  after(tok,5200,function(){
+    returnDebris(function(){
+      if(tok!==routTok)return;
+      after(tok,600,function(){
+        cl.remove("fallen");cl.add("getup");
+        after(tok,2850,function(){
+          cl.remove("getup");cl.add("stand");
+          after(tok,250,function(){standUp(tok)})})})})})}
+function standUp(tok){
+  var cl=botEl.classList;
+  cl.add("jet","sputter");                              /* the jetpack coughs back to life */
+  after(tok,1300,function(){
+    cl.remove("jet","sputter");
+    if(hitCount>=2){                                    /* second crash in a row: sits and cries */
+      cl.remove("angry");cl.add("sad","sit");
+      after(tok,9000,function(){cl.remove("sit","sad");hitCount=0;finishRoutine(tok)});
+      return}
+    cl.remove("mute");
+    var lines=BOTL[lang].grumpy.slice(),i=0;
+    (function next(){
+      if(tok!==routTok)return;
+      if(i>=3||i>=lines.length){finishRoutine(tok);return}
+      botSayRaw(lines[i++]);after(tok,2700,next)})()})}
+function finishRoutine(tok){
+  var cl=botEl.classList;
+  stopTalk();cl.add("mute");cl.remove("angry","hurt","stand");
+  if(botBubEl)botBubEl.style.maxWidth="";
+  var t=botHome();
+  after(tok,t+250,function(){
+    cl.remove("mute","above");
+    routBusy=false;downUntil=0;curKind="__";botKey=""})}
+function botTap(){
+  if(!botEl)return;
+  botEl.classList.remove("hop");void botEl.offsetWidth;botEl.classList.add("hop");
+  setTimeout(function(){if(botEl)botEl.classList.remove("hop")},520);
+  botSay("quip")}
+function botGrab(e){
+  if(!botEl||botHeld)return;
+  flyTok++;botFly=null;stopMove();routEnd();downUntil=0;
+  botHeld=true;botSeq++;stopPress();clearTimeout(recoverT);stopTalk();
+  var cl=botEl.classList;
+  cl.remove("walk","hurt","jump","hop","flying","ground","stand","jet","moving","talk","landing","liftoff","thud");
+  botMoving=false;pendTxt=null;setTilt(0);
+  if(cl.contains("broken"))cl.add("hurt","angry");
+  dragInfo={lx:pos.x,ly:pos.y,sx:e.clientX,sy:e.clientY,moves:[{t:Date.now(),x:e.clientX,y:e.clientY}]};
+  cl.add("held");
   try{botEl.setPointerCapture(e.pointerId)}catch(err){}
   lastAct=Date.now();
   if(e.preventDefault)e.preventDefault()}
@@ -638,48 +1134,79 @@ function botDragMove(e){
   var sr=stage.getBoundingClientRect(),bw=botEl.offsetWidth||120,bh=botEl.offsetHeight||120;
   var x=dragInfo.lx+(e.clientX-dragInfo.sx),y=dragInfo.ly+(e.clientY-dragInfo.sy);
   x=Math.max(0,Math.min(sr.width-bw,x));y=Math.max(0,Math.min(sr.height-bh,y));
-  botEl.style.left=x+"px";botEl.style.top=y+"px";faceFor(x);
+  setPos(x,y);faceFor(x);
   dragInfo.moves.push({t:Date.now(),x:e.clientX,y:e.clientY});
   if(dragInfo.moves.length>6)dragInfo.moves.shift();
   lastAct=Date.now()}
 function botRelease(){
   if(!botHeld||!botEl)return;botHeld=false;botEl.classList.remove("held");
-  var vx=0,vy=0,m=dragInfo?dragInfo.moves:[];
-  if(m.length>1){var a=m[0],b=m[m.length-1],dt=Math.max(16,b.t-a.t);vx=(b.x-a.x)/dt*1000;vy=(b.y-a.y)/dt*1000}
+  var vx=0,vy=0,moved=0,m=dragInfo?dragInfo.moves:[];
+  if(m.length>1){
+    var a=m[0],b=m[m.length-1],dt=Math.max(16,b.t-a.t);
+    moved=Math.hypot(b.x-a.x,b.y-a.y);
+    if(moved>14){vx=(b.x-a.x)/dt*1000;vy=(b.y-a.y)/dt*1000}}
   dragInfo=null;
-  vx=Math.max(-1700,Math.min(1700,vx));vy=Math.max(-1700,Math.min(1700,vy));
-  if(Math.abs(vx)>60||Math.abs(vy)>60)botFling(vx,vy);
-  else scheduleRecover(2600);
-  lastAct=Date.now()}
-function botCrash(){
+  vx=Math.max(-2200,Math.min(2200,vx));vy=Math.max(-2200,Math.min(2200,vy));
+  lastAct=Date.now();
+  /* jetpack is broken: let go of him and he simply falls */
+  if(botEl.classList.contains("broken")){botEl.classList.add("mute","angry");botFall(vx*.6,vy*.6,lieDown);return}
+  if(Math.abs(vx)>110||Math.abs(vy)>110){botFling(vx,vy);return}
+  settleClass();
+  if(moved<8){botTap()}
+  scheduleRecover(moved<8?1800:2600)}
+/* hard hit: the jetpack dies and arms and legs break off */
+function botCrash(vx,vy){
   if(!botEl)return;
-  botEl.classList.add("hurt");botSay("ouch");
-  downUntil=Date.now()+3400}
+  var now=Date.now();
+  if(now-hitAt>90000)hitCount=0;
+  hitAt=now;hitCount++;
+  var cl=botEl.classList;
+  cl.add("hurt","angry","mute","broken");cl.remove("jet","ground","stand","moving","walk","talk");
+  botKey="";pendTxt=null;stopTalk();
+  routBusy=true;downUntil=now+180000;
+  spawnDebris(vx||0,vy||0);flashSparks(1500)}
 function botFling(vx,vy){
   if(!botEl)return;
-  botEl.style.transition="none";
-  var sr=stage.getBoundingClientRect(),bw=botEl.offsetWidth||120,bh=botEl.offsetHeight||120;
-  var x=parseFloat(botEl.style.left)||10,y=parseFloat(botEl.style.top)||10,lastT=Date.now(),crashed=false;
+  stopMove();
+  var cl=botEl.classList;cl.remove("ground","stand","jet","moving","walk");cl.add("flying");
+  var sr=stage.getBoundingClientRect(),bw=botEl.offsetWidth||60,bh=botEl.offsetHeight||60;
+  var lastT=performance.now(),crashed=false,tok=++flyTok;
   botFly={};
+  function hit(speed){if(speed>260&&!crashed){crashed=true;botCrash(vx,vy)}}
   function step(now){
-    if(!botEl){botFly=null;return}
-    var dt=Math.min(50,now-lastT);lastT=now;
-    x+=vx*dt/1000;y+=vy*dt/1000;vx*=0.985;vy*=0.985;
-    if(x<0){x=0;if(Math.abs(vx)>300&&!crashed){crashed=true;botCrash()}vx=-vx*0.45}
-    if(x>sr.width-bw){x=sr.width-bw;if(Math.abs(vx)>300&&!crashed){crashed=true;botCrash()}vx=-vx*0.45}
-    if(y<0){y=0;if(Math.abs(vy)>300&&!crashed){crashed=true;botCrash()}vy=-vy*0.45}
-    if(y>sr.height-bh){y=sr.height-bh;if(Math.abs(vy)>300&&!crashed){crashed=true;botCrash()}vy=-vy*0.45}
-    botEl.style.left=x+"px";botEl.style.top=y+"px";faceFor(x);
+    if(tok!==flyTok||!botEl)return;
+    var dt=Math.min(40,now-lastT);lastT=now;
+    var k=Math.pow(.985,dt/16.7),x=pos.x+vx*dt/1000,y=pos.y+vy*dt/1000;
+    vx*=k;vy*=k;
+    if(x<0){x=0;hit(Math.abs(vx));vx=-vx*.45}
+    if(x>sr.width-bw){x=sr.width-bw;hit(Math.abs(vx));vx=-vx*.45}
+    if(y<0){y=0;hit(Math.abs(vy));vy=-vy*.45}
+    if(y>sr.height-bh){y=sr.height-bh;hit(Math.abs(vy));vy=-vy*.45}
+    setPos(x,y);faceFor(x);
+    if(crashed){botFall(vx,vy,lieDown);return}
     if(Math.abs(vx)>14||Math.abs(vy)>14)requestAnimationFrame(step);
-    else{botFly=null;botEl.style.transition="";scheduleRecover(crashed?3400:2200)}}
+    else{botFly=null;settleClass();scheduleRecover(1800)}}
   requestAnimationFrame(step)}
 if(botEl){
   botEl.addEventListener("pointerdown",botGrab);
   botEl.addEventListener("pointermove",botDragMove);
   botEl.addEventListener("pointerup",botRelease);
-  botEl.addEventListener("pointercancel",botRelease)}
+  botEl.addEventListener("pointercancel",botRelease);
+  botEl.addEventListener("contextmenu",function(e){e.preventDefault()});
+  botEl.addEventListener("dragstart",function(e){e.preventDefault()})}
 
-if(botEl){botSay("hello");var botIv=setInterval(botTick,3000);if(botIv.unref)botIv.unref()}
+var botRsT=null;
+addEventListener("resize",function(){clearTimeout(botRsT);botRsT=setTimeout(function(){
+  placeLedge();
+  if(!botEl||botHeld||botFly||routBusy)return;
+  botEl.classList.remove("hurt");downUntil=0;botHome();curKind="__"},320)});
+if(botEl){
+  botTxt.innerHTML='<span class="gh"></span><span class="ty"></span>';
+  ghEl=botTxt.firstChild;tyEl=botTxt.lastChild;
+  placeLedge();
+  setPos(HOME.x,HOME.y);botEl.classList.add("ground");
+  addEventListener("load",placeLedge);
+  botSay("hello");var botIv=setInterval(botTick,1000);if(botIv.unref)botIv.unref()}
 
 var reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
 })();
