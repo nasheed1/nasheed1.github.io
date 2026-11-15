@@ -193,18 +193,18 @@ footer a:hover{color:var(--red)}
 }
 /* short screens: shrink page contents so nothing is ever pushed out */
 @media(max-height:740px){
-  .info p{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
   .bookS,.bookM{height:min(82vh,650px);height:min(82dvh,650px)}
   .pg{padding:18px 20px 32px}
-  .art{height:25%;min-height:88px}
-  .info{padding-top:11px}.info h3{font-size:1.35rem}.info p{font-size:.9rem;line-height:1.6}
-  .btn{padding:7px 12px;font-size:.88rem}
+  .art{height:22%;min-height:80px}
+  .info{padding-top:11px}.info h3{font-size:1.35rem}.info p{font-size:.88rem;line-height:1.55}
+  .btn{padding:7px 11px;font-size:.85rem}
   .pgCover .clogo{width:60px;height:60px}.pgCover .clogo svg{width:33px;height:33px}
   .pgTitle h1{font-size:clamp(1.8rem,6vw,2.8rem)}
 }
 @media(max-height:560px){
-  .art{height:19%;min-height:64px}
-  .info p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .art{height:16%;min-height:56px}
+  .info h3{font-size:1.25rem}.sub{font-size:.92rem}
+  .info p{font-size:.84rem;line-height:1.5}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
@@ -431,6 +431,14 @@ footer{border-top:2px dashed var(--line);background:linear-gradient(#f7f2e7,#efe
 @keyframes crashJolt{0%{transform:scale(1,1)}35%{transform:scale(1.08,.88)}70%{transform:scale(.97,1.04)}100%{transform:scale(1,1)}}
 /* gentler settle into the lying pose */
 .bot.fallen .bot-svg{transition:transform .45s cubic-bezier(.25,1.35,.45,1)}
+/* PC "Coming Soon" warning — appears only when the PC button is clicked */
+.pcwarn{position:fixed;inset:0;z-index:60;background:rgba(56,53,47,.55);display:grid;place-items:center;padding:18px}
+.pcwarn[hidden]{display:none}
+.pcwarn-card{background:var(--scrap);border:2px solid var(--ink);border-radius:var(--rs);box-shadow:5px 5px 0 rgba(56,53,47,.4);max-width:420px;width:100%;padding:22px;text-align:center}
+.pcwarn-card h3{font:700 1.3rem var(--mark);margin:0 0 8px;color:var(--ink)}
+.pcwarn-card p{font:600 .95rem/1.6 var(--serif);color:var(--mute);margin:0 0 16px}
+.pcwarn-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.pcwarn-btns .btn{cursor:pointer;font-family:var(--sans)}
 </style>
 </head>
 <body>
@@ -500,6 +508,16 @@ footer{border-top:2px dashed var(--line);background:linear-gradient(#f7f2e7,#efe
     <div class="bot-bub"><span id="botTxt"></span></div>
   </div>
   <div id="bookWrap"></div>
+  <div class="pcwarn" id="pcwarn" hidden>
+    <div class="pcwarn-card">
+      <h3 id="pcwarnTitle"></h3>
+      <p id="pcwarnText"></p>
+      <div class="pcwarn-btns">
+        <a class="btn p" id="pcwarnGo" target="_blank" rel="noopener"></a>
+        <button class="btn" id="pcwarnCancel" type="button"></button>
+      </div>
+    </div>
+  </div>
   <div class="under">
     <button class="navbtn" id="prevB" aria-label="Previous page">‹</button>
     <span id="counter"></span>
@@ -518,8 +536,8 @@ footer{border-top:2px dashed var(--line);background:linear-gradient(#f7f2e7,#efe
 "use strict";
 var EMB=[{"id":"nijashwa-studio","name":{"bn":"নিজস্ব স্টুডিও","en":"Nijashwa Studio"},"desc":{"bn":"অফলাইন ভিডিও এডিটর। টাইমলাইন, বাংলা টেক্সট, ট্রানজিশন, ইফেক্ট ও MP4 এক্সপোর্ট। সার্ভার বা অ্যাকাউন্ট লাগে না।","en":"An offline video editor with timeline, Bengali text, transitions, effects and MP4 export. No server or account needed."},"tags":["android","pc"],"pcSoon":true,"links":{"web":"https://nasheed1.github.io/nijashwa-studio/","apk":"https://github.com/nasheed1/nijashwa-studio/releases/latest","pc":"https://github.com/nasheed1/nijashwa-studio/releases/latest/download/NijashwaStudio.exe","source":"https://github.com/nasheed1/nijashwa-studio"}},{"id":"dawater-hisab","name":{"bn":"দাওয়াতের হিসাব","en":"Dawater Hisab"},"desc":{"bn":"বিয়ে, ওয়ালিমা, আকিকা বা মিলাদের দাওয়াতে অতিথি অনুযায়ী কতটুকু চাল, গোশত, তেল ও মসলা লাগবে — পুরো বাজারের তালিকা এক ট্যাপে।","en":"Planning a wedding, walima, aqiqah or milad feast? Enter the guest count and menu to get the full bazaar list — rice, meat, oil and spices — in one tap."},"links":{"apk":"https://github.com/nasheed1/dawater-hisab/releases/latest","web":"https://nasheed1.github.io/dawater-hisab/"},"tags":["android","web"]}];
 var T={
-bn:{lead:"আমার বানানো সব ওপেন সোর্স অ্যাপ এক তাকে। মোবাইল ও PC দুটোর জন্যই, সবই বিনা মূল্যে।",all:"সব",android:"Android",pc:"PC",web:"ওয়েব",apk:"APK ডাউনলোড",webb:"ব্রাউজারে চালাও",pcb:"PC-র জন্য ডাউনলোড",src:"সোর্স কোড",more:"আরও অ্যাপ আসছে। নতুন অ্যাপ বানালেই এখানে যোগ হবে।",empty:"এই ধরনের কোনো অ্যাপ এখনও নেই।",foot:"সব অ্যাপ MIT লাইসেন্সে ওপেন সোর্স।",hint:"বইটি খুলতে ছুঁয়ে দিন",swipe:"পাশে স্লাইড করে পেজ উল্টান",contents:"সূচিপত্র",pick:"কোন অ্যাপটা খুলবে, বেছে নাও",end:"সমাপ্ত",pg:"পৃষ্ঠা",cover:"প্রচ্ছদ",pcsoon:"PC সংস্করণ — Coming Soon",pcnote:"PC সংস্করণটা এখনও ডেভেলপমেন্টে আছে — পুরোপুরি তৈরি হয়নি। তবু চাইলে বাটনে ক্লিক করে এখনই ডাউনলোড করে দেখতে পারো।"},
-en:{lead:"Every open-source app I build, on one shelf. For phone and PC, all free.",all:"All",android:"Android",pc:"PC",web:"Web",apk:"Download APK",webb:"Open in browser",pcb:"Download for PC",src:"Source code",more:"More apps are on the way. New ones will be added here as I build them.",empty:"No apps of this kind yet.",foot:"All apps are open source under the MIT license.",hint:"Tap the book to open it",swipe:"Swipe to turn the page",contents:"Contents",pick:"Pick an app to open",end:"The End",pg:"Page",cover:"Cover",pcsoon:"PC version — Coming Soon",pcnote:"The PC version is still in development and not fully ready yet. If you want to try it anyway, the button above still downloads it."}};
+bn:{lead:"আমার বানানো সব ওপেন সোর্স অ্যাপ এক তাকে। মোবাইল ও PC দুটোর জন্যই, সবই বিনা মূল্যে।",all:"সব",android:"Android",pc:"PC",web:"ওয়েব",apk:"APK ডাউনলোড",webb:"ব্রাউজারে চালাও",pcb:"PC-র জন্য ডাউনলোড",src:"সোর্স কোড",more:"আরও অ্যাপ আসছে। নতুন অ্যাপ বানালেই এখানে যোগ হবে।",empty:"এই ধরনের কোনো অ্যাপ এখনও নেই।",foot:"সব অ্যাপ MIT লাইসেন্সে ওপেন সোর্স।",hint:"বইটি খুলতে ছুঁয়ে দিন",swipe:"পাশে স্লাইড করে পেজ উল্টান",contents:"সূচিপত্র",pick:"কোন অ্যাপটা খুলবে, বেছে নাও",end:"সমাপ্ত",pg:"পৃষ্ঠা",cover:"প্রচ্ছদ",pcsoon:"PC সংস্করণ — Coming Soon",pcnote:"PC সংস্করণটা এখনও ডেভেলপমেন্টে আছে — পুরোপুরি তৈরি হয়নি। তবু চাইলে বাটনে ক্লিক করে এখনই ডাউনলোড করে দেখতে পারো।",anyway:"তবুও ডাউনলোড করো",cancel:"বাতিল"},
+en:{lead:"Every open-source app I build, on one shelf. For phone and PC, all free.",all:"All",android:"Android",pc:"PC",web:"Web",apk:"Download APK",webb:"Open in browser",pcb:"Download for PC",src:"Source code",more:"More apps are on the way. New ones will be added here as I build them.",empty:"No apps of this kind yet.",foot:"All apps are open source under the MIT license.",hint:"Tap the book to open it",swipe:"Swipe to turn the page",contents:"Contents",pick:"Pick an app to open",end:"The End",pg:"Page",cover:"Cover",pcsoon:"PC version — Coming Soon",pcnote:"The PC version is still in development and not fully ready yet. If you want to try it anyway, you can download it now.",anyway:"Download anyway",cancel:"Cancel"}};
 var FILTERS=["all","android","pc","web"],ICON={android:"i-and",pc:"i-pc",web:"i-web"};
 var lang="bn",flt="all",apps=EMB;
 try{var s0=localStorage.getItem("nl-lang");if(s0==="bn"||s0==="en")lang=s0}catch(e){}
@@ -581,9 +599,9 @@ function appPage(a){
   var b=el("div","btns"),L=a.links||{},u;
   if(u=safe(L.apk))b.appendChild(btn(u,t("apk"),"i-dl",1));
   if(u=safe(L.web))b.appendChild(btn(u,t("webb"),"i-web",1));
-  if(u=safe(L.pc)){var pb=btn(u,a.pcSoon?t("pcsoon"):t("pcb"),"i-pc");if(a.pcSoon)pb.classList.add("soon");b.appendChild(pb)}
+  if(u=safe(L.pc)){var pb=btn(u,t("pcb"),"i-pc");if(a.pcSoon){pb.classList.add("soon");pb.setAttribute("data-pcwarn",u)}b.appendChild(pb)}
   if(u=safe(L.source))b.appendChild(btn(u,t("src"),"i-code"));
-  inf.appendChild(b);if(a.pcSoon&&safe(L.pc))inf.appendChild(el("p","pcnote",t("pcnote")));p.appendChild(inf);return p}
+  inf.appendChild(b);p.appendChild(inf);return p}
 function morePage(){
   var p=el("div","pg pgMore"),d=el("div","dash");
   d.appendChild(ic("i-plus"));d.appendChild(el("p",null,t("more")));p.appendChild(d);return p}
@@ -592,6 +610,13 @@ function endPage(){
   w.appendChild(el("div","big",t("end")));w.appendChild(el("div","ft",t("foot")));
   var a=el("a");a.href="https://github.com/nasheed1";a.target="_blank";a.rel="noopener";a.appendChild(ic("i-gh"));a.appendChild(el("span",null,"GitHub · nasheed1"));
   w.appendChild(a);p.appendChild(w);return p}
+/* PC-version warning modal: shown only when a "Coming Soon" PC button is clicked */
+function openPcWarn(url){var w=$("#pcwarn");if(!w)return;$("#pcwarnTitle").textContent=t("pcsoon");$("#pcwarnText").textContent=t("pcnote");var g=$("#pcwarnGo");g.href=url;g.textContent=t("anyway");$("#pcwarnCancel").textContent=t("cancel");w.hidden=false}
+function closePcWarn(){var w=$("#pcwarn");if(w)w.hidden=true}
+document.addEventListener("click",function(e){var a=e.target.closest?e.target.closest("[data-pcwarn]"):null;if(a){e.preventDefault();openPcWarn(a.getAttribute("data-pcwarn"))}});
+$("#pcwarn").addEventListener("click",function(e){if(e.target===this)closePcWarn()});
+$("#pcwarnGo").addEventListener("click",closePcWarn);
+$("#pcwarnCancel").addEventListener("click",closePcWarn);
 function makePages(){
   var arr=[coverPage(),insidePage(),titlePage(),contentsPage()];
   filtered().forEach(function(a){arr.push(appPage(a))});
